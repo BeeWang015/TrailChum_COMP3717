@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
-    //Project created.
+    //Project created. This is something that needs to be changed.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
