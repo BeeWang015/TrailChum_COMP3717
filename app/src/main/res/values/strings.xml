@@ -3,5 +3,28 @@
 
     <string name="createAccountMainMenu">Create account</string>
     <string name="signInMainMenu">Sign in</string>
-    <string name="tempMap">Temp Map</string>
+    <string name="tempMap">Temp map</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="accountDetailsCreateAccount">Account details</string>
+    <string name="emailCreateAccount">Email: </string>
+    <string name="emailHintCreateAccount">bob1234@gmail.com</string>
+
+    <string name="personalDetailsCreateAccount">Personal Details</string>
+
+    <string name="firstNameCreateAccount">First name: </string>
+    <string name="lastNameCreateAccount">Last name: </string>
+    <string name="passwordCreateAccount">Password: </string>
+    <string name="confirmPasswordCreateAccount">Confirm password: </string>
+    <string name="genderCreateAccount">Gender: </string>
+    <string name="dateOfBirthCreateAccount">Date of birth: </string>
+    <string name="dateOfBirthHintCreateAccount">DD-MM-YYYY</string>
+
+    <string name="createAccountBtnCreateAccount">Create Account</string>
+
+    <string name="completeHikesUserProfile">Completed hikes</string>
+    <string name="upcomingHikesUserProfile">Upcoming hikes</string>
+    <string name="hikeTrailGoalsUserProfiles">Hike trail goals</string>
+
+    <string name="firstLastNameUserProfile">First and last name</string>
 </resources>
