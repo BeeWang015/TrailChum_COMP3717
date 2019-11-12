@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "950219061354",
+    "firebase_url": "https://trailchum.firebaseio.com",
+    "project_id": "trailchum",
+    "storage_bucket": "trailchum.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950219061354:android:262985811718f7b5367213",
+        "android_client_info": {
+          "package_name": "ca.bcit.comp3717.trailchum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950219061354-iin0n0cmf187oi66j5lsh9oq1tbuani5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.bcit.comp3717.trailchum",
+            "certificate_hash": "e650df6d994658d99c5e9d2301ae457a49548442"
+          }
+        },
+        {
+          "client_id": "950219061354-0hvrg9mj9m59jd06tsfjaa5ih7gjc01i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlcqGjn0R3ADfDyb1Wwi8-FFW0qJwn6R0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950219061354-0hvrg9mj9m59jd06tsfjaa5ih7gjc01i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

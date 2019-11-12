@@ -42,8 +42,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 tools:srcCompat="@tools:sample/avatars" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
                 <TextView
-                    android:id="@+id/tvUpcomingEventsUserProfile"
+                    android:id="@+id/tvUpcomingHikesUserProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -54,10 +59,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:background="#c4c4c4">
-
+                    android:background="#c6c6c6">
                 </ListView>
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <TextView
                     android:id="@+id/tvCompletedHikesUserProfile"
                     android:layout_width="wrap_content"
@@ -67,28 +76,34 @@
 
 
                 <ListView
-                    android:id="@+id/lvCompletedHikes"
+                    android:id="@+id/lvCompletedHikesUserProfile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
                     android:background="#c6c6c6">
                 </ListView>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvHikeGoalUserProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="@string/hikeTrailGoalsUserProfiles" />
-
-
-            <ListView
-                android:id="@+id/lvGoalTrailsUserProfile"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:background="#c6c6c6">
-            </ListView>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvHikeGoalUserProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/hikeTrailGoalsUserProfiles" />
+
+
+                <ListView
+                    android:id="@+id/lvGoalTrailsUserProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="#c6c6c6">
+                </ListView>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
