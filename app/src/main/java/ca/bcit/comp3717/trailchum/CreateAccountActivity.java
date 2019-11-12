@@ -152,8 +152,6 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
             return;
         }
 
-        UserKey userID = new UserKey();
-
         String key = databaseAccounts.child("user").push().getKey();
         //String toDoTask = databaseToDoList.push().getKey();
         UserAccount userAccounts = new UserAccount(email, firstName, lastName,
