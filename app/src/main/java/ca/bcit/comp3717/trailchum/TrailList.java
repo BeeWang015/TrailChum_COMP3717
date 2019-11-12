@@ -23,9 +23,9 @@ public class TrailList extends AppCompatActivity {
     private ListView lvTrails;
     // URL to get contacts JSON
     private static String SERVICE_URL =
-            "https://gis.burnaby.ca/arcgis/rest/services/OpenData/OpenData5/MapServer/14/query?" +
-                    "where=1%3D1&outFields=COMPKEY,ADDRQUAL,TRAILCLASS,STAIRS,AREALEN,MATERIAL," +
-                    "AREAWID&outSR=4326&f=json";
+            "https://gis.burnaby.ca/arcgis/rest/services/OpenData/OpenData5/MapServer/14/" +
+                    "query?where=1%3D1&outFields=ADDRQUAL,TRAILCLASS,STAIRS,MATERIAL,PATHNAME," +
+                    "AREALEN,AREAWID,COMPKEY&outSR=4326&f=json";
     private ArrayList<Trail> trailList;
 
     @Override
@@ -73,7 +73,8 @@ public class TrailList extends AppCompatActivity {
                         JSONObject attributes = listItem.getJSONObject("attributes");
 
                         if (!attributes.get("ADDRQUAL").toString().equals("null")
-                                && !attributes.get("COMPKEY").toString().equals("null")) {
+                                && !attributes.get("COMPKEY").toString().equals("null")
+                                && !attributes.get("PATHNAME").toString().equals("null")) {
 
                             String compKey = attributes.get("COMPKEY").toString();
                             String addrqual = attributes.get("ADDRQUAL").toString();
@@ -82,11 +83,13 @@ public class TrailList extends AppCompatActivity {
                             String length = attributes.get("AREALEN").toString();
                             String material = attributes.get("MATERIAL").toString();
                             String stairs = attributes.get("STAIRS").toString();
+                            String pathName = attributes.get("PATHNAME").toString();
 
                             Trail trail = new Trail();
 
                             trail.setCOMPKEY(compKey);
                             trail.setADDRQUAL(addrqual);
+                            trail.setPATHNAME(pathName);
 
                             if (!trailClass.equals("null")) {
                                 trail.setTRAILCLASS("N/A");
@@ -150,6 +153,22 @@ public class TrailList extends AppCompatActivity {
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            // Dismiss the progress dialog
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+            //Toon[] toonArray = toonList.toArray(new Toon[toonList.size()]);
+
+            TrailsAdapter adapter = new TrailsAdapter(TrailList.this, trailList);
+
+            // Attach the adapter to a ListView
+            lvTrails.setAdapter(adapter);
         }
 
     }

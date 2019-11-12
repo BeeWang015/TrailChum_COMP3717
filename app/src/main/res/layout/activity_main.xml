@@ -79,6 +79,15 @@
             app:layout_constraintStart_toStartOf="parent"
             android:onClick="onOpenMap"/>
 
+        <Button
+            android:id="@+id/btnTrailList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#c4c4c4"
+            android:text="trails"
+            android:textColor="#000000"
+            android:onClick="onOpenTrailList"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
