@@ -72,9 +72,7 @@ public class TrailList extends AppCompatActivity {
                         JSONObject listItem = trailsList.getJSONObject(i);
                         JSONObject attributes = listItem.getJSONObject("attributes");
 
-                        if (!attributes.get("ADDRQUAL").toString().equals("null")
-                                && !attributes.get("COMPKEY").toString().equals("null")
-                                && !attributes.get("PATHNAME").toString().equals("null")) {
+                        if (!attributes.get("PATHNAME").toString().equals("null")) {
 
                             String compKey = attributes.get("COMPKEY").toString();
                             String addrqual = attributes.get("ADDRQUAL").toString();
@@ -87,9 +85,19 @@ public class TrailList extends AppCompatActivity {
 
                             Trail trail = new Trail();
 
-                            trail.setCOMPKEY(compKey);
-                            trail.setADDRQUAL(addrqual);
                             trail.setPATHNAME(pathName);
+
+                            if (!compKey.equals("null")) {
+                                trail.setCOMPKEY("N/A");
+                            } else {
+                                trail.setCOMPKEY(compKey);
+                            }
+
+                            if (!addrqual.equals("null")) {
+                                trail.setADDRQUAL("N/A");
+                            } else {
+                                trail.setADDRQUAL(addrqual);
+                            }
 
                             if (!trailClass.equals("null")) {
                                 trail.setTRAILCLASS("N/A");
@@ -169,6 +177,8 @@ public class TrailList extends AppCompatActivity {
 
             // Attach the adapter to a ListView
             lvTrails.setAdapter(adapter);
+
+            Toast.makeText(TrailList.this, String.valueOf(trailList.size()), Toast.LENGTH_LONG).show();
         }
 
     }
