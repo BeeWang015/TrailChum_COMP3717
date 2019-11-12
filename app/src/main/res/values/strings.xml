@@ -17,8 +17,7 @@
     <string name="passwordCreateAccount">Password: </string>
     <string name="confirmPasswordCreateAccount">Confirm password: </string>
     <string name="genderCreateAccount">Gender: </string>
-    <string name="dateOfBirthCreateAccount">Date of birth: </string>
-    <string name="dateOfBirthHintCreateAccount">DD-MM-YYYY</string>
+    <string name="dateOfBirthPickerCreateAccount">Date of birth</string>
 
     <string name="createAccountBtnCreateAccount">Create Account</string>
 
