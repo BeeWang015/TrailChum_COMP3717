@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TrailChum</string>
+
+    <string name="createAccountMainMenu">Create account</string>
+    <string name="signInMainMenu">Sign in</string>
+    <string name="tempMap">Temp Map</string>
 </resources>
