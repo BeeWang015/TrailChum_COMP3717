@@ -27,4 +27,15 @@
     <string name="hikeTrailGoalsUserProfiles">Hike trail goals</string>
 
     <string name="firstLastNameUserProfile">First and last name</string>
+
+    <string name="trailLength">Trail Length: </string>
+    <string name="rating">Rating: </string>
+    <string name="reviews">Reviews</string>
+    <string name="surface">Surface: </string>
+    <string name="stairs">Stairs: </string>
+    <string name="trailWidth">Trail Width: </string>
+    <string name="trailClass">Trail Class: </string>
+
+    <string name="addTrailToWishlist">Add Trail to Wishlist</string>
+
 </resources>

@@ -1,13 +1,18 @@
 package ca.bcit.comp3717.trailchum;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -36,6 +41,22 @@ public class TrailList extends AppCompatActivity {
         trailList = new ArrayList<>();
         lvTrails = findViewById(R.id.lvTrails);
         new GetContacts().execute();
+
+        lvTrails.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Trail trail = trailList.get(position);
+
+                showTrailDetailView(trail.getPATHNAME(),
+                        trail.getTRAILCLASS(),
+                        trail.getMATERIAL(),
+                        trail.getAREALEN(),
+                        trail.getAREAWID(),
+                        trail.getSTAIRS(),
+                        "No ratings.");
+
+            }
+        });
     }
 
     /**
@@ -87,43 +108,43 @@ public class TrailList extends AppCompatActivity {
 
                             trail.setPATHNAME(pathName);
 
-                            if (!compKey.equals("null")) {
+                            if (compKey.equals("null")) {
                                 trail.setCOMPKEY("N/A");
                             } else {
                                 trail.setCOMPKEY(compKey);
                             }
 
-                            if (!addrqual.equals("null")) {
+                            if (addrqual.equals("null")) {
                                 trail.setADDRQUAL("N/A");
                             } else {
                                 trail.setADDRQUAL(addrqual);
                             }
 
-                            if (!trailClass.equals("null")) {
+                            if (trailClass.equals("null") || length.equals("0")) {
                                 trail.setTRAILCLASS("N/A");
                             } else {
                                 trail.setTRAILCLASS(trailClass);
                             }
 
-                            if (!width.equals("null")) {
+                            if (width.equals("null") || width.equals("0")) {
                                 trail.setAREAWID("N/A");
                             } else {
-                                trail.setAREAWID(width);
+                                trail.setAREAWID(width + " M");
                             }
 
-                            if (!length.equals("null")) {
+                            if (length.equals("null")) {
                                 trail.setAREALEN("N/A");
                             } else {
-                                trail.setAREALEN(length);
+                                trail.setAREALEN(length + " M");
                             }
 
-                            if (!material.equals("null")) {
+                            if (material.equals("null")) {
                                 trail.setMATERIAL("N/A");
                             } else {
                                 trail.setMATERIAL(material);
                             }
 
-                            if (!stairs.equals("null")) {
+                            if (stairs.equals("null")) {
                                 trail.setSTAIRS("N/A");
                             } else {
                                 trail.setSTAIRS(stairs);
@@ -181,6 +202,43 @@ public class TrailList extends AppCompatActivity {
             Toast.makeText(TrailList.this, String.valueOf(trailList.size()), Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void showTrailDetailView(final String trailTitle,
+                                     final String trailClass,
+                                     final String trailSurface,
+                                     final String trailLength,
+                                     final String trailWidth,
+                                     final String stairs,
+                                     final String trailRating) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(TrailList.this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.trail_detail_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final TextView dialogTitle = dialogView.findViewById(R.id.tvTrailName);
+        dialogTitle.setText(trailTitle);
+
+        final TextView tvTrailClass = dialogView.findViewById(R.id.tvTrailClassValue);
+        tvTrailClass.setText(trailClass);
+
+        final TextView tvTrailSurface = dialogView.findViewById(R.id.tvSurfaceValue);
+        tvTrailSurface.setText(trailSurface);
+
+        final TextView tvTrailLength  = dialogView.findViewById(R.id.tvLengthValue);
+        tvTrailLength.setText(trailLength);
+
+        final TextView tvTrailWidth = dialogView.findViewById(R.id.tvTrailWidthValue);
+        tvTrailWidth.setText(trailWidth);
+
+        final TextView tvStairs = dialogView.findViewById(R.id.tvStairsValue);
+        tvStairs.setText(stairs);
+
+        final TextView tvRating = dialogView.findViewById(R.id.tvRatingValue);
+        tvRating.setText(trailRating);
+
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 }
 
