@@ -137,6 +137,6 @@
         android:layout_height="wrap_content"
         android:text="@string/addTrailToWishlist"
         android:layout_margin="10dp"
-        android:background="#2BBE2C" />
+        android:background="#D251A0E4" />
 
 </LinearLayout>
