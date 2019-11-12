@@ -70,6 +70,7 @@
         <EditText
             android:id="@+id/etPasswordCreateAccount"
             android:layout_width="0dp"
+            android:password="true"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPassword"
@@ -92,6 +93,7 @@
         <EditText
             android:id="@+id/etConfirmPasswordCreateAccount"
             android:layout_width="0dp"
+            android:password="true"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPassword"
@@ -135,9 +137,8 @@
 
         <EditText
             android:id="@+id/etFirstNameCreateAccount"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="name"
             android:ems="10"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
@@ -146,7 +147,7 @@
 
         <EditText
             android:id="@+id/etLastNameCreateAccount"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="name"
             android:ems="10"
@@ -155,26 +156,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLastNameCreateAccount" />
 
-        <TextView
-            android:id="@+id/tvBirthDateCreateAccount"
-            android:layout_width="wrap_content"
+        <Button
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/dateOfBirthCreateAccount"
+            android:layout_marginTop="8dp"
+            android:text="@string/dateOfBirthPickerCreateAccount"
+            android:id="@+id/btnDOBPickerCreateAccount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etLastNameCreateAccount" />
 
-        <EditText
-            android:id="@+id/etBirthDateCreateAccount"
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="date"
+            android:id="@+id/tvDateOfBirthCreateAccount"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvBirthDateCreateAccount" />
+            app:layout_constraintTop_toBottomOf="@+id/btnDOBPickerCreateAccount"
+
+            />
 
         <TextView
             android:id="@+id/tvGenderCreateAccount"
@@ -186,7 +188,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etBirthDateCreateAccount" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDateOfBirthCreateAccount" />
 
         <Spinner
             android:id="@+id/spinnerGenderCreateAccount"
@@ -198,17 +200,16 @@
 
         <Button
             android:id="@+id/btnCreateAccountCreateAccount"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="#000000"
             android:onClick="onUserProfileCreated"
             android:text="@string/createAccountBtnCreateAccount"
             android:textColor="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etBirthDateCreateAccount" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerGenderCreateAccount" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
