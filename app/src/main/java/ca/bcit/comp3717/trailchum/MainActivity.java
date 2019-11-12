@@ -2,13 +2,11 @@ package ca.bcit.comp3717.trailchum;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.DatePicker;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     //Project created. This is something that needs to be changed.
 
@@ -34,4 +32,10 @@ public class MainActivity extends AppCompatActivity{
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
+
+    public void onOpenTrailList(View view) {
+        Intent intent = new Intent(this, TrailList.class);
+        startActivity(intent);
+    }
+
 }

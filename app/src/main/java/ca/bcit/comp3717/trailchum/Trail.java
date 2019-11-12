@@ -16,11 +16,19 @@ public class Trail {
 
     private String AREALEN;
 
+    private String PATHNAME;
+
     public void setCOMPKEY(String COMPKEY){
         this.COMPKEY = COMPKEY;
     }
     public String getCOMPKEY(){
         return this.COMPKEY;
+    }
+    public void setPATHNAME(String PATHNAME) {
+        this.PATHNAME = PATHNAME;
+    }
+    public String getPATHNAME() {
+        return this.PATHNAME;
     }
     public void setADDRQUAL(String ADDRQUAL){
         this.ADDRQUAL = ADDRQUAL;
