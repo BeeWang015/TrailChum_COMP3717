@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -184,6 +186,72 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         });
     }
 
+//    private void showUpdateDialog(String email, String firstName, String lastName, String gender) {
+//        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+//
+//        LayoutInflater inflater = getLayoutInflater();
+//
+//        final View dialogView = inflater.inflate(R.layout.update_dialog, null);
+//        dialogBuilder.setView(dialogView);
+//
+//        final EditText etToDoTask = dialogView.findViewById(R.id.etTask);
+//        etToDoTask.setText(task);
+//
+//        final EditText etWho = dialogView.findViewById(R.id.etWho);
+//        etWho.setText(who);
+//
+//        final TextView tvDate = dialogView.findViewById(R.id.tvDate);
+//        tvDate.setText(date);
+//
+//        final Spinner spinnerDone = dialogView.findViewById(R.id.spinnerDone);
+//        spinnerDone.setSelection(((ArrayAdapter<String>) spinnerDone.getAdapter()).getPosition(done));
+//
+//        final Button btnUpdate = dialogView.findViewById(R.id.btnUpdate);
+//
+//        dialogBuilder.setTitle("Update Task " + task + " for " + who);
+//
+//        final AlertDialog alertDialog = dialogBuilder.create();
+//        alertDialog.show();
+//
+//        btnUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String email = etEmail.getText().toString().trim();
+//                String firstName = etFirstName.getText().toString().trim();
+//                String lastName = etLastName.getText().toString().trim();
+//                String dateOfBirth = tvDate.getText().toString().trim();
+//                String password = etPassword.getText().toString().trim();
+//                String confirmPassword = etConfirmPassword.getText().toString().trim();
+//                String gender = spnrGender.getSelectedItem().toString().trim();
+//
+//                if (TextUtils.isEmpty(email)) {
+//                    etToDoTask.setError("Email is required");
+//                    return;
+//                } else if (TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName)) {
+//                    etWho.setError("Name is required");
+//                    return;
+//                } else if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
+//                    tvDate.setError("Date is required");
+//                }
+//
+//                updateTasks(tasks, who, date, done);
+//
+//                alertDialog.dismiss();
+//            }
+//        });
+//
+//        final Button btnDelete = dialogView.findViewById(R.id.btnDelete);
+//        btnDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                deleteTask(task);
+//
+//                alertDialog.dismiss();
+//            }
+//        });
+//
+//    }
+
     public void onUserProfileCreated(View view) {
         Intent intent = new Intent(this, UserProfileActivity.class);
         if (!etPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
@@ -220,14 +288,6 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         tvDate = findViewById(R.id.tvDateOfBirthCreateAccount);
         tvDate.setText(currentDate);
         dateOfBirth = tvDate.getText().toString();
-    }
-
-    public static String EncodeString(String string) {
-        return string.replace(".", ",");
-    }
-
-    public static String DecodeString(String string) {
-        return string.replace(",", ".");
     }
 }
 
