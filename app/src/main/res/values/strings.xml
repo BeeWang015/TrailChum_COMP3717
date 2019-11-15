@@ -9,7 +9,7 @@
     <string name="accountDetailsCreateAccount">Account details</string>
     <string name="emailCreateAccount">Email: </string>
     <string name="emailHintCreateAccount">bob1234@gmail.com</string>
-
+    <string name ="mapType"> Types</string>
     <string name="personalDetailsCreateAccount">Personal Details</string>
 
     <string name="firstNameCreateAccount">First name: </string>
@@ -36,6 +36,11 @@
     <string name="trailClass">Trail Class: </string>
 
     <string name="addTrailToWishlist">Add Trail to Wishlist</string>
+    <string name="search">Search</string>
+    <string name="zoomIn">Zoom In</string>
+    <string name="zoomOut">Zoom Out</string>
+    <string name="custom">Custom</string>
+    <string name="current_location">Current Location</string>
 
     <string name="facebook_application_id" translatable="false">481644469103319</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb481644469103319</string>
