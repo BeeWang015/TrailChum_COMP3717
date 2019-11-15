@@ -30,6 +30,7 @@
     <string name="trailClass">Trail Class: </string>
 
     <string name="addTrailToWishlist">Add Trail to Wishlist</string>
+    <string name="viewTrailOnMap">View Trail On Map</string>
     <string name="search">Search</string>
     <string name="zoomIn">Zoom In</string>
     <string name="zoomOut">Zoom Out</string>

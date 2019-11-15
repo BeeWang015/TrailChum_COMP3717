@@ -143,7 +143,7 @@
         android:id="@+id/btnViewOnMap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/viewTrailonMap"
+        android:text="@string/viewTrailOnMap"
         android:layout_margin="10dp"
         android:background="#D2FF4FC0" />
 
