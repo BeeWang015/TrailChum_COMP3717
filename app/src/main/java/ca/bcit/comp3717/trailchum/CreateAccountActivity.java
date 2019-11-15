@@ -37,18 +37,13 @@ import java.util.List;
 
 
 public class CreateAccountActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
-    EditText etEmail;
-    EditText etPassword;
-    EditText etConfirmPassword;
     Spinner spnrGender;
-
-    EditText etFirstName;
-    EditText etLastName;
-
     TextView tvDate;
-
     String genderSelected;
     String dateOfBirth;
+
+    List<String> lvTrailsToBeDone;
+    List<String> lvTrailsDone;
 
     Button btnCreateAccount;
 
@@ -61,7 +56,7 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
-        databaseAccounts = FirebaseDatabase.getInstance().getReference("Accounts");
+        databaseAccounts = FirebaseDatabase.getInstance().getReference("UserAccounts");
 
         spnrGender = findViewById(R.id.spinnerGenderCreateAccount);
         ArrayList<String> genders = new ArrayList<>();
@@ -71,16 +66,6 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         ArrayAdapter<String> gendersAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, genders);
         spnrGender.setAdapter(gendersAdapter);
-
-        etEmail = findViewById(R.id.etEmailCreateAccount);
-
-        etFirstName = findViewById(R.id.etFirstNameCreateAccount);
-        etLastName = findViewById(R.id.etLastNameCreateAccount);
-
-        etPassword = findViewById(R.id.etPasswordCreateAccount);
-        etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        etConfirmPassword = findViewById(R.id.etConfirmPasswordCreateAccount);
-        etConfirmPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
         genderSelected = spnrGender.getSelectedItem().toString();
         userAccountList = new ArrayList<UserAccount>();
@@ -125,65 +110,10 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
     }
 
     private void addUserAccount() {
-        String email = etEmail.getText().toString().trim();
-        String firstName = etFirstName.getText().toString().trim();
-        String lastName = etLastName.getText().toString().trim();
         String dateOfBirth = tvDate.getText().toString().trim();
-        String password = etPassword.getText().toString().trim();
-        String confirmPassword = etConfirmPassword.getText().toString().trim();
         String gender = spnrGender.getSelectedItem().toString().trim();
-
-
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(this, "You must enter an email.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(firstName)) {
-            Toast.makeText(this, "You must enter a first name.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(lastName)) {
-            Toast.makeText(this, "You must enter a last name.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
-            Toast.makeText(this, "You must a valid and matching passwords.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        String key = databaseAccounts.child("user").push().getKey();
-        //String toDoTask = databaseToDoList.push().getKey();
-        UserAccount userAccounts = new UserAccount(email, firstName, lastName,
-                gender, password, confirmPassword, dateOfBirth);
-
-        Task setValueUserAccount = databaseAccounts.child(key).setValue(userAccounts);
-
-        setValueUserAccount.addOnSuccessListener(new OnSuccessListener() {
-            @Override
-            public void onSuccess(Object o) {
-                Toast.makeText(CreateAccountActivity.this, "User account created.",
-                        Toast.LENGTH_LONG).show();
-
-                etEmail.setText("");
-                etFirstName.setText("");
-                etLastName.setText("");
-                etPassword.setText("");
-                etConfirmPassword.setText("");
-                spnrGender.setSelection(0);
-            }
-        });
-
-        setValueUserAccount.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(CreateAccountActivity.this,
-                        "something went wrong.\n" + e.toString(),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        List<String> trailsToBeDone = null;
+        List<String> trailsDone = null;
     }
 
 //    private void showUpdateDialog(String email, String firstName, String lastName, String gender) {
@@ -254,21 +184,11 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
 
     public void onUserProfileCreated(View view) {
         Intent intent = new Intent(this, UserProfileActivity.class);
-        if (!etPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
-            Toast.makeText(this, "Passwords need to be matching!",
-                    Toast.LENGTH_LONG).show();
-            return;
-        } else if (tvDate.getText().toString() == null || tvDate.getText().toString().isEmpty()) {
+        if (tvDate.getText().toString() == null || tvDate.getText().toString().isEmpty()) {
             Toast.makeText(this, "Birthday must be set correctly!",
                     Toast.LENGTH_LONG).show();
             return;
-        } else {
-            intent.putExtra("password", etPassword.getText().toString());
-            intent.putExtra("confirmPassword", etConfirmPassword.getText().toString());
         }
-        intent.putExtra("firstName", etFirstName.getText().toString());
-        intent.putExtra("lastName", etLastName.getText().toString());
-        intent.putExtra("email", etEmail.getText().toString());
         intent.putExtra("gender", genderSelected);
         intent.putExtra("dateOfBirth", dateOfBirth);
 

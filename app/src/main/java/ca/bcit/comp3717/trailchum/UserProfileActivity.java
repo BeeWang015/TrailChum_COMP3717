@@ -26,7 +26,8 @@ import java.util.List;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    Button btnSignout;
+    Button btnSignOut;
+    FirebaseUser user;
 
     List<AuthUI.IdpConfig> signInProviders;
     public static final int MY_REQUEST_CODE = 501;
@@ -40,24 +41,28 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        ivProfilePic = findViewById(R.id.ivProfilePicUserProfile);
-
         Intent intent = getIntent();
 
-        String firstName = intent.getStringExtra("firstName");
-        String lastName = intent.getStringExtra("lastName");
-        String email = intent.getStringExtra("email");
-        String gender = intent.getStringExtra("gender");
 
-        btnSignout = findViewById(R.id.btnSignOut);
+        ivProfilePic = findViewById(R.id.ivProfilePicUserProfile);
+        btnSignOut = findViewById(R.id.btnSignOut);
         tvName = findViewById(R.id.tvNameUserProfile);
-        tvName.setText(firstName + " " + lastName);
-        signInProviders = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.PhoneBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build()
-        );
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+
+            user = FirebaseAuth.getInstance().getCurrentUser();
+
+            tvName.setText(user.getDisplayName());
+        } else {
+            signInProviders = Arrays.asList(
+                    new AuthUI.IdpConfig.EmailBuilder().build(),
+                    new AuthUI.IdpConfig.PhoneBuilder().build(),
+                    new AuthUI.IdpConfig.FacebookBuilder().build(),
+                    new AuthUI.IdpConfig.GoogleBuilder().build());
+
+        }
+
 
     }
 
@@ -66,7 +71,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                btnSignout.setEnabled(false);
+                btnSignOut.setEnabled(false);
                 showSignInOptions();
 
             }
@@ -93,16 +98,17 @@ public class UserProfileActivity extends AppCompatActivity {
         if (requestCode == MY_REQUEST_CODE) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                user = FirebaseAuth.getInstance().getCurrentUser();
                 Toast.makeText(this, "" + user.getEmail(), Toast.LENGTH_SHORT).show();
 
                 tvName.setText(user.getDisplayName());
 
-                btnSignout.setEnabled(true);
+                btnSignOut.setEnabled(true);
             } else {
                 Toast.makeText(this, "" + response.getError().getMessage()
                         , Toast.LENGTH_SHORT).show();
             }
         }
     }
+
 }

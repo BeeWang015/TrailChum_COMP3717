@@ -7,15 +7,9 @@
     <string name="title_activity_maps">Map</string>
 
     <string name="accountDetailsCreateAccount">Account details</string>
-    <string name="emailCreateAccount">Email: </string>
-    <string name="emailHintCreateAccount">bob1234@gmail.com</string>
-    <string name ="mapType"> Types</string>
+    <string name="mapType"> Types</string>
     <string name="personalDetailsCreateAccount">Personal Details</string>
 
-    <string name="firstNameCreateAccount">First name: </string>
-    <string name="lastNameCreateAccount">Last name: </string>
-    <string name="passwordCreateAccount">Password: </string>
-    <string name="confirmPasswordCreateAccount">Confirm password: </string>
     <string name="genderCreateAccount">Gender: </string>
     <string name="dateOfBirthPickerCreateAccount">Date of birth</string>
 
