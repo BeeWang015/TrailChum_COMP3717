@@ -5,12 +5,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TrailList extends AppCompatActivity {
 
@@ -53,7 +56,8 @@ public class TrailList extends AppCompatActivity {
                         trail.getAREALEN(),
                         trail.getAREAWID(),
                         trail.getSTAIRS(),
-                        "No ratings.");
+                        "No ratings.",
+                        trail.getPathGeometry());
 
             }
         });
@@ -93,7 +97,8 @@ public class TrailList extends AppCompatActivity {
                         JSONObject listItem = trailsList.getJSONObject(i);
                         JSONObject attributes = listItem.getJSONObject("attributes");
 
-                        if (!attributes.get("PATHNAME").toString().equals("null")) {
+                        if (!attributes.get("PATHNAME").toString().equals("null")
+                                && !attributes.get("COMPKEY").toString().equals("null")) {
 
                             String compKey = attributes.get("COMPKEY").toString();
                             String addrqual = attributes.get("ADDRQUAL").toString();
@@ -103,16 +108,22 @@ public class TrailList extends AppCompatActivity {
                             String material = attributes.get("MATERIAL").toString();
                             String stairs = attributes.get("STAIRS").toString();
                             String pathName = attributes.get("PATHNAME").toString();
+                            ArrayList<Double> geometryPath = new ArrayList<>();
 
                             Trail trail = new Trail();
 
-                            trail.setPATHNAME(pathName);
-
-                            if (compKey.equals("null")) {
-                                trail.setCOMPKEY("N/A");
-                            } else {
-                                trail.setCOMPKEY(compKey);
+                            JSONObject geometry = listItem.getJSONObject("geometry");
+                            JSONArray paths = geometry.getJSONArray("paths");
+                            JSONArray pathsContent = paths.getJSONArray(0);
+                            for (int x = 0; x < pathsContent.length(); x++) {
+                                for (int y = 0; y < pathsContent.getJSONArray(x).length(); y++) {
+                                    geometryPath.add(pathsContent.getJSONArray(x).getDouble(y));
+                                }
                             }
+
+                            trail.setPATHNAME(pathName);
+                            trail.setPathGeometry(geometryPath);
+                            trail.setCOMPKEY(compKey);
 
                             if (addrqual.equals("null")) {
                                 trail.setADDRQUAL("N/A");
@@ -210,7 +221,8 @@ public class TrailList extends AppCompatActivity {
                                      final String trailLength,
                                      final String trailWidth,
                                      final String stairs,
-                                     final String trailRating) {
+                                     final String trailRating,
+                                     final ArrayList<Double> geometryPath) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(TrailList.this);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.trail_detail_dialog, null);
@@ -236,6 +248,16 @@ public class TrailList extends AppCompatActivity {
 
         final TextView tvRating = dialogView.findViewById(R.id.tvRatingValue);
         tvRating.setText(trailRating);
+
+        final Button btnViewOnMap = dialogView.findViewById(R.id.btnViewOnMap);
+        btnViewOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TrailList.this, MapsActivity.class);
+                intent.putExtra("geometryPath", geometryPath);
+                startActivity(intent);
+            }
+        });
 
         final AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();

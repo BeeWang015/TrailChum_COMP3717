@@ -36,5 +36,6 @@
     <string name="trailClass">Trail Class: </string>
 
     <string name="addTrailToWishlist">Add Trail to Wishlist</string>
+    <string name="viewTrailonMap">View Trail on Map</string>
 
 </resources>
