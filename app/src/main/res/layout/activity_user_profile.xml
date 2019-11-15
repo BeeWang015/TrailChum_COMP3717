@@ -102,6 +102,13 @@
                 </ListView>
             </LinearLayout>
 
+            <Button
+                android:id="@+id/btnSignOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SignOut"
+                android:onClick="onSignOut"/>
+
         </LinearLayout>
     </ScrollView>
 
