@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,8 +43,8 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
     String genderSelected;
     String dateOfBirth;
 
-    List<String> lvTrailsToBeDone;
-    List<String> lvTrailsDone;
+    ArrayList<String> lvTrailsToBeDone;
+    ArrayList<String> lvTrailsDone;
 
     Button btnCreateAccount;
 
@@ -112,8 +113,8 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
     private void addUserAccount() {
         String dateOfBirth = tvDate.getText().toString().trim();
         String gender = spnrGender.getSelectedItem().toString().trim();
-        List<String> trailsToBeDone = null;
-        List<String> trailsDone = null;
+        ArrayList<String> trailsToBeDone = new ArrayList<String>();
+        ArrayList<String> trailsDone = new ArrayList<String>();
     }
 
 //    private void showUpdateDialog(String email, String firstName, String lastName, String gender) {
@@ -191,6 +192,9 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         }
         intent.putExtra("gender", genderSelected);
         intent.putExtra("dateOfBirth", dateOfBirth);
+        intent.putStringArrayListExtra("trailsToBeDone", lvTrailsToBeDone);
+        intent.putStringArrayListExtra("trailsDone", lvTrailsDone);
+
 
 
         startActivity(intent);
