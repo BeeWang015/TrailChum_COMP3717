@@ -76,6 +76,16 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
 
         userAccountsListCreateAccount = new ArrayList<UserAccount>();
 
+//        if(databaseUserAccounts.child(userCreateAccount.getUid()).getKey()
+//                == userCreateAccount.getUid()){
+//            Toast.makeText(this, "User exists!", Toast.LENGTH_SHORT).show();
+//
+//            Intent intent = new Intent(CreateAccountActivity.this, UserProfileActivity.class);
+//            startActivity(intent);
+//
+//
+//        }
+
         signInProviders = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
