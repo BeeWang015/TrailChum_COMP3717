@@ -15,12 +15,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class TrailStartEndMap extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    List<Parcelable> geometryPath;
-//    private LocationManager locationManager;
-//    private LocationListener locationListener;
+    List<Parcelable> pathStart;
+    List<Parcelable> pathEnd;
 
 
     @Override
@@ -33,8 +32,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        geometryPath = getIntent().getParcelableArrayListExtra("geometryPath");
-        Toast.makeText(this, geometryPath.toString(), Toast.LENGTH_LONG).show();
+        pathStart = getIntent().getParcelableArrayListExtra("pathStart");
+        pathEnd = getIntent().getParcelableArrayListExtra("pathEnd");
+//        Toast.makeText(this, pathStart.toString() + pathEnd.toString(), Toast.LENGTH_LONG).show();
 
     }
 

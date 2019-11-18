@@ -43,44 +43,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
+            android:background="#0E2F44"
             android:onClick="onSignIn"
             android:text="@string/signInMainMenu"
             android:textColor="@color/colorPrimary"
-            android:background="#0E2F44"
-            app:layout_constraintBottom_toTopOf="@+id/btnCreateAcc"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.505"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAppName"
             app:layout_constraintVertical_bias="1.0" />
 
-        <Button
-            android:id="@+id/btnCreateAcc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:background="#000000"
-            android:text="@string/createAccountMainMenu"
-            android:textColor="@color/colorPrimary"
-            android:onClick="onCreateAccount"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <Button
-            android:id="@+id/btnMapTemp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:background="#c4c4c4"
-            android:text="@string/tempMap"
-            android:textColor="#000000"
-            app:layout_constraintBottom_toTopOf="@+id/btnSignIn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:onClick="onOpenMap"/>
 
         <Button
             android:id="@+id/btnTrailList"
@@ -91,7 +64,6 @@
             android:onClick="onOpenTrailList"
             android:text="trails"
             android:textColor="#000000"
-            app:layout_constraintBottom_toTopOf="@+id/tvAppName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -1,6 +1,5 @@
 package ca.bcit.comp3717.trailchum;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TrailList extends AppCompatActivity {
 
@@ -57,7 +55,8 @@ public class TrailList extends AppCompatActivity {
                         trail.getAREAWID(),
                         trail.getSTAIRS(),
                         "No ratings.",
-                        trail.getPathGeometry());
+                        trail.getPATHSTART(),
+                        trail.getPATHEND());
 
             }
         });
@@ -108,22 +107,32 @@ public class TrailList extends AppCompatActivity {
                             String material = attributes.get("MATERIAL").toString();
                             String stairs = attributes.get("STAIRS").toString();
                             String pathName = attributes.get("PATHNAME").toString();
-                            ArrayList<Double> geometryPath = new ArrayList<>();
+                            ArrayList<Double> pathStart = new ArrayList<>();
+                            ArrayList<Double> pathEnd = new ArrayList<>();
 
                             Trail trail = new Trail();
 
                             JSONObject geometry = listItem.getJSONObject("geometry");
                             JSONArray paths = geometry.getJSONArray("paths");
                             JSONArray pathsContent = paths.getJSONArray(0);
-                            for (int x = 0; x < pathsContent.length(); x++) {
-                                for (int y = 0; y < pathsContent.getJSONArray(x).length(); y++) {
-                                    geometryPath.add(pathsContent.getJSONArray(x).getDouble(y));
-                                }
+//                            for (int x = 0; x < pathsContent.length(); x++) {
+//                                for (int y = 0; y < pathsContent.getJSONArray(x).length(); y++) {
+//                                    geometryPath.add(pathsContent.getJSONArray(x).getDouble(y));
+//                                }
+//                            }
+
+                            for (int y = 0; y < pathsContent.getJSONArray(0).length(); y++) {
+                                pathStart.add(pathsContent.getJSONArray(0).getDouble(y));
+                            }
+
+                            for (int y = 0; y < pathsContent.getJSONArray(pathsContent.length() - 1).length(); y++) {
+                                pathEnd.add(pathsContent.getJSONArray(pathsContent.length() - 1).getDouble(y));
                             }
 
                             trail.setPATHNAME(pathName);
-                            trail.setPathGeometry(geometryPath);
                             trail.setCOMPKEY(compKey);
+                            trail.setPATHSTART(pathStart);
+                            trail.setPATHEND(pathEnd);
 
                             if (addrqual.equals("null")) {
                                 trail.setADDRQUAL("N/A");
@@ -222,7 +231,8 @@ public class TrailList extends AppCompatActivity {
                                      final String trailWidth,
                                      final String stairs,
                                      final String trailRating,
-                                     final ArrayList<Double> geometryPath) {
+                                     final ArrayList<Double> pathStart,
+                                     final ArrayList<Double> pathEnd) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(TrailList.this);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.trail_detail_dialog, null);
@@ -253,8 +263,9 @@ public class TrailList extends AppCompatActivity {
         btnViewOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TrailList.this, MapsActivity.class);
-                intent.putExtra("geometryPath", geometryPath);
+                Intent intent = new Intent(TrailList.this, TrailStartEndMap.class);
+                intent.putExtra("pathStart", pathStart);
+                intent.putExtra("pathEnd", pathEnd);
                 startActivity(intent);
             }
         });
