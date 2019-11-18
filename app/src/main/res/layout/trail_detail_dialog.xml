@@ -139,4 +139,12 @@
         android:layout_margin="10dp"
         android:background="#D251A0E4" />
 
+    <Button
+        android:id="@+id/btnViewOnMap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/viewTrailOnMap"
+        android:layout_margin="10dp"
+        android:background="#D2FF4FC0" />
+
 </LinearLayout>

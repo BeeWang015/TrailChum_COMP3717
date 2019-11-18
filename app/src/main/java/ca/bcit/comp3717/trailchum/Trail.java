@@ -1,5 +1,10 @@
 package ca.bcit.comp3717.trailchum;
 
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Trail {
 
     private String COMPKEY;
@@ -18,6 +23,8 @@ public class Trail {
 
     private String PATHNAME;
 
+    private ArrayList<Double> COORDS;
+
     public void setCOMPKEY(String COMPKEY){
         this.COMPKEY = COMPKEY;
     }
@@ -29,6 +36,12 @@ public class Trail {
     }
     public String getPATHNAME() {
         return this.PATHNAME;
+    }
+    public void setPathGeometry(ArrayList<Double> COORDS) {
+        this.COORDS = COORDS;
+    }
+    public ArrayList<Double> getPathGeometry() {
+        return this.COORDS;
     }
     public void setADDRQUAL(String ADDRQUAL){
         this.ADDRQUAL = ADDRQUAL;

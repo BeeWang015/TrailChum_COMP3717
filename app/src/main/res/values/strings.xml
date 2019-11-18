@@ -30,6 +30,7 @@
     <string name="trailClass">Trail Class: </string>
 
     <string name="addTrailToWishlist">Add Trail to Wishlist</string>
+    <string name="viewTrailOnMap">View Trail On Map</string>
     <string name="search">Search</string>
     <string name="zoomIn">Zoom In</string>
     <string name="zoomOut">Zoom Out</string>
@@ -38,6 +39,26 @@
 
     <string name="facebook_application_id" translatable="false">481644469103319</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb481644469103319</string>
+    <string name="inbox">Inbox</string>
+    <string name="drafts">Drafts</string>
+    <string name="sent_items">Sent Items</string>
+    <string name="trash">Trash</string>
+    <string name="help">Help</string>
+    <string name="feedback">Feedback</string>
+    <string name="user_name">spot@catchat.com</string>
+    <!-- menu items -->
+    <string name="nav_inbox">Main Page</string>
+    <string name="nav_drafts">Matching</string>
+    <string name="nav_sent">Trails</string>
+    <string name="nav_trash">In da trash</string>
+    <string name="nav_support">Support</string>
+    <string name="nav_help">Help</string>
+    <string name="nav_feedback">Give us feedback</string>
+    <string name="nav_open_drawer">Open Navigation drawer</string>
+    <string name="nav_close_drawer">Close navigation drawer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
