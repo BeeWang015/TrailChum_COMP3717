@@ -2,6 +2,8 @@ package ca.bcit.comp3717.trailchum;
 
 import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,12 +12,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-//    List<Parcelable> geometryPath;
+    List<Parcelable> geometryPath;
 //    private LocationManager locationManager;
 //    private LocationListener locationListener;
 
@@ -30,17 +33,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-//        geometryPath = getIntent().getParcelableArrayListExtra("geometryPath");
-//        Toast.makeText(this, geometryPath.toString(), Toast.LENGTH_LONG).show();
+        geometryPath = getIntent().getParcelableArrayListExtra("geometryPath");
+        Toast.makeText(this, geometryPath.toString(), Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
     }
 
 
