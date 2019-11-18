@@ -107,8 +107,8 @@ public class TrailList extends AppCompatActivity {
                             String material = attributes.get("MATERIAL").toString();
                             String stairs = attributes.get("STAIRS").toString();
                             String pathName = attributes.get("PATHNAME").toString();
-                            ArrayList<Double> pathStart = new ArrayList<>();
-                            ArrayList<Double> pathEnd = new ArrayList<>();
+                            ArrayList<String> pathStart = new ArrayList<>();
+                            ArrayList<String> pathEnd = new ArrayList<>();
 
                             Trail trail = new Trail();
 
@@ -122,11 +122,11 @@ public class TrailList extends AppCompatActivity {
 //                            }
 
                             for (int y = 0; y < pathsContent.getJSONArray(0).length(); y++) {
-                                pathStart.add(pathsContent.getJSONArray(0).getDouble(y));
+                                pathStart.add(pathsContent.getJSONArray(0).getString(y));
                             }
 
                             for (int y = 0; y < pathsContent.getJSONArray(pathsContent.length() - 1).length(); y++) {
-                                pathEnd.add(pathsContent.getJSONArray(pathsContent.length() - 1).getDouble(y));
+                                pathEnd.add(pathsContent.getJSONArray(pathsContent.length() - 1).getString(y));
                             }
 
                             trail.setPATHNAME(pathName);
@@ -231,8 +231,8 @@ public class TrailList extends AppCompatActivity {
                                      final String trailWidth,
                                      final String stairs,
                                      final String trailRating,
-                                     final ArrayList<Double> pathStart,
-                                     final ArrayList<Double> pathEnd) {
+                                     final ArrayList<String> pathStart,
+                                     final ArrayList<String> pathEnd) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(TrailList.this);
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.trail_detail_dialog, null);

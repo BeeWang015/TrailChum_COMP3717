@@ -23,9 +23,9 @@ public class Trail {
 
     private String PATHNAME;
 
-    private ArrayList<Double> PATHSTART;
+    private ArrayList<String> PATHSTART;
 
-    private ArrayList<Double> PATHEND;
+    private ArrayList<String> PATHEND;
 
     public void setCOMPKEY(String COMPKEY){
         this.COMPKEY = COMPKEY;
@@ -39,16 +39,16 @@ public class Trail {
     public String getPATHNAME() {
         return this.PATHNAME;
     }
-    public void setPATHSTART(ArrayList<Double> PATHSTART) {
+    public void setPATHSTART(ArrayList<String> PATHSTART) {
         this.PATHSTART = PATHSTART;
     }
-    public ArrayList<Double> getPATHSTART() {
+    public ArrayList<String> getPATHSTART() {
         return this.PATHSTART;
     }
-    public void setPATHEND(ArrayList<Double> PATHEND) {
+    public void setPATHEND(ArrayList<String> PATHEND) {
         this.PATHEND = PATHEND;
     }
-    public ArrayList<Double> getPATHEND() {
+    public ArrayList<String> getPATHEND() {
         return this.PATHEND;
     }
     public void setADDRQUAL(String ADDRQUAL){
