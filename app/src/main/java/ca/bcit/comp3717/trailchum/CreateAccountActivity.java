@@ -1,6 +1,7 @@
 package ca.bcit.comp3717.trailchum;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
@@ -17,13 +18,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
+import com.firebase.ui.auth.data.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,73 +41,99 @@ import com.google.firebase.database.ValueEventListener;
 import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
 
 public class CreateAccountActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
-    Spinner spnrGender;
-    TextView tvDate;
-    String genderSelected;
-    String dateOfBirth;
 
-    ArrayList<String> lvTrailsToBeDone;
-    ArrayList<String> lvTrailsDone;
+    public static int MY_REQUEST_CODE = 502;
+    List<AuthUI.IdpConfig> signInProviders;
+
+    String email;
+    String userName;
+    ArrayList<String> trailsToBeDone;
+    String gendersSelected;
 
     Button btnCreateAccount;
+    Button btnSignOut;
+    Button btnDatePicker;
+    TextView dateOfBirthPicked;
+    Spinner sGender;
 
-    DatabaseReference databaseAccounts;
+    DatabaseReference databaseUserAccounts;
+    FirebaseUser userCreateAccount;
 
-    List<UserAccount> userAccountList;
+    List<UserAccount> userAccountsListCreateAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
-        databaseAccounts = FirebaseDatabase.getInstance().getReference("UserAccounts");
+        databaseUserAccounts = FirebaseDatabase.getInstance().getReference("hikersAccounts");
 
-        spnrGender = findViewById(R.id.spinnerGenderCreateAccount);
-        ArrayList<String> genders = new ArrayList<>();
-        genders.add("Male");
-        genders.add("Female");
-        genders.add("Other");
-        ArrayAdapter<String> gendersAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, genders);
-        spnrGender.setAdapter(gendersAdapter);
+        userAccountsListCreateAccount = new ArrayList<UserAccount>();
 
-        genderSelected = spnrGender.getSelectedItem().toString();
-        userAccountList = new ArrayList<UserAccount>();
+        signInProviders = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.PhoneBuilder().build(),
+                new AuthUI.IdpConfig.FacebookBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build());
 
-        Button btnDatePicker = findViewById(R.id.btnDOBPickerCreateAccount);
-        btnDatePicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment datePicker = new DatePickerFragment();
-                datePicker.show(getSupportFragmentManager(), "date picker");
-            }
-        });
+        showSignInOptions();
+
+        sGender = findViewById(R.id.spinnerGenderCreateAccount);
+        ArrayList<String> gendersCreateAccount = new ArrayList<>();
+        gendersCreateAccount.add("Male");
+        gendersCreateAccount.add("Female");
+        gendersCreateAccount.add("Other");
+        ArrayAdapter<String> gendersAdapterCreateAccount = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, gendersCreateAccount);
+
+        sGender.setAdapter(gendersAdapterCreateAccount);
+        gendersSelected = sGender.getSelectedItem().toString();
 
         btnCreateAccount = findViewById(R.id.btnCreateAccountCreateAccount);
+        btnSignOut = findViewById(R.id.btnSignOut);
+        btnDatePicker = findViewById(R.id.btnDOBPickerCreateAccount);
+        dateOfBirthPicked = findViewById(R.id.tvDateOfBirthCreateAccount);
+
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                addUserAccount();
+            public void onClick(View v) {
+
+                addTasks();
+                Intent intent = new Intent(CreateAccountActivity.this, UserProfileActivity.class);
+                intent.putExtra("email", email);
+                intent.putExtra("name", userName);
+                intent.putExtra("dateOfBirth", dateOfBirthPicked.getText().toString());
+
+                startActivity(intent);
+
             }
         });
 
+        btnDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "Date Picked");
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        databaseAccounts.addValueEventListener(new ValueEventListener() {
+        databaseUserAccounts.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userAccountList.clear();
+                userAccountsListCreateAccount.clear();
                 for (DataSnapshot studentSnapshot : dataSnapshot.getChildren()) {
-                    UserAccount userAcc = studentSnapshot.getValue(UserAccount.class);
-                    userAccountList.add(userAcc);
+                    UserAccount userAccountz = studentSnapshot.getValue(UserAccount.class);
+                    userAccountsListCreateAccount.add(userAccountz);
                 }
 
             }
@@ -110,108 +144,85 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         });
     }
 
-    private void addUserAccount() {
-        String dateOfBirth = tvDate.getText().toString().trim();
-        String gender = spnrGender.getSelectedItem().toString().trim();
-        ArrayList<String> trailsToBeDone = new ArrayList<String>();
-        ArrayList<String> trailsDone = new ArrayList<String>();
-    }
+    private void addTasks() {
+        String userEmailAddTask = email;
+        String nameAddTask = userName;
+        String dateOfBirthAddTask = dateOfBirthPicked.getText().toString();
+        String genderAddTask = gendersSelected;
 
-//    private void showUpdateDialog(String email, String firstName, String lastName, String gender) {
-//        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-//
-//        LayoutInflater inflater = getLayoutInflater();
-//
-//        final View dialogView = inflater.inflate(R.layout.update_dialog, null);
-//        dialogBuilder.setView(dialogView);
-//
-//        final EditText etToDoTask = dialogView.findViewById(R.id.etTask);
-//        etToDoTask.setText(task);
-//
-//        final EditText etWho = dialogView.findViewById(R.id.etWho);
-//        etWho.setText(who);
-//
-//        final TextView tvDate = dialogView.findViewById(R.id.tvDate);
-//        tvDate.setText(date);
-//
-//        final Spinner spinnerDone = dialogView.findViewById(R.id.spinnerDone);
-//        spinnerDone.setSelection(((ArrayAdapter<String>) spinnerDone.getAdapter()).getPosition(done));
-//
-//        final Button btnUpdate = dialogView.findViewById(R.id.btnUpdate);
-//
-//        dialogBuilder.setTitle("Update Task " + task + " for " + who);
-//
-//        final AlertDialog alertDialog = dialogBuilder.create();
-//        alertDialog.show();
-//
-//        btnUpdate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String email = etEmail.getText().toString().trim();
-//                String firstName = etFirstName.getText().toString().trim();
-//                String lastName = etLastName.getText().toString().trim();
-//                String dateOfBirth = tvDate.getText().toString().trim();
-//                String password = etPassword.getText().toString().trim();
-//                String confirmPassword = etConfirmPassword.getText().toString().trim();
-//                String gender = spnrGender.getSelectedItem().toString().trim();
-//
-//                if (TextUtils.isEmpty(email)) {
-//                    etToDoTask.setError("Email is required");
-//                    return;
-//                } else if (TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName)) {
-//                    etWho.setError("Name is required");
-//                    return;
-//                } else if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
-//                    tvDate.setError("Date is required");
-//                }
-//
-//                updateTasks(tasks, who, date, done);
-//
-//                alertDialog.dismiss();
-//            }
-//        });
-//
-//        final Button btnDelete = dialogView.findViewById(R.id.btnDelete);
-//        btnDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                deleteTask(task);
-//
-//                alertDialog.dismiss();
-//            }
-//        });
-//
-//    }
 
-    public void onUserProfileCreated(View view) {
-        Intent intent = new Intent(this, UserProfileActivity.class);
-        if (tvDate.getText().toString() == null || tvDate.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Birthday must be set correctly!",
+        if (TextUtils.isEmpty(dateOfBirthAddTask)) {
+            Toast.makeText(this, "You must enter a valid date of birth.",
                     Toast.LENGTH_LONG).show();
             return;
         }
-        intent.putExtra("gender", genderSelected);
-        intent.putExtra("dateOfBirth", dateOfBirth);
-        intent.putStringArrayListExtra("trailsToBeDone", lvTrailsToBeDone);
-        intent.putStringArrayListExtra("trailsDone", lvTrailsDone);
 
+        //String toDoTask = databaseToDoList.push().getKey();
+        UserAccount user1 = new UserAccount(userEmailAddTask, nameAddTask, genderAddTask,
+                dateOfBirthAddTask, trailsToBeDone);
 
+        Task setValueToDoTask = databaseUserAccounts.child(userCreateAccount.getUid()).setValue(user1);
 
-        startActivity(intent);
+        setValueToDoTask.addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                Toast.makeText(CreateAccountActivity.this,
+                        "User added.", Toast.LENGTH_LONG).show();
+
+                dateOfBirthPicked.setText("");
+                sGender.setSelection(0);
+            }
+        });
+
+        setValueToDoTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CreateAccountActivity.this,
+                        "something went wrong.\n" + e.toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showSignInOptions() {
+        startActivityForResult(
+                AuthUI.getInstance().createSignInIntentBuilder()
+                        .setAvailableProviders(signInProviders)
+                        .setTheme(R.style.mySignInTheme).build(), MY_REQUEST_CODE
+        );
     }
 
     @Override
-    public void onDateSet(DatePicker view, int year, int month, int day) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MY_REQUEST_CODE) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+            if (resultCode == RESULT_OK) {
+
+                userCreateAccount = FirebaseAuth.getInstance().getCurrentUser();
+                Toast.makeText(this, "" + userCreateAccount.getEmail(), Toast.LENGTH_SHORT).show();
+
+                email = userCreateAccount.getEmail();
+                userName = userCreateAccount.getDisplayName();
+
+            } else {
+                Toast.makeText(this, "" + response.getError().getMessage()
+                        , Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
-        c.set(Calendar.DAY_OF_MONTH, day);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+        String currentDueDate = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
 
-        tvDate = findViewById(R.id.tvDateOfBirthCreateAccount);
-        tvDate.setText(currentDate);
-        dateOfBirth = tvDate.getText().toString();
+        dateOfBirthPicked.setText(currentDueDate);
     }
 }
 

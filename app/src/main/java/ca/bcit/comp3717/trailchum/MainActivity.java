@@ -19,11 +19,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSignIn(View view) {
-        Intent intent = new Intent(this, UserProfileActivity.class);
-        startActivity(intent);
-    }
-
-    public void onCreateAccount(View view) {
         Intent intent = new Intent(this, CreateAccountActivity.class);
         startActivity(intent);
     }
