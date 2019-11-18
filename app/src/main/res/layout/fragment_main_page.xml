@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainPageFragment">
+    tools:context=".MainPageFragment"
+    android:background="@drawable/main_background">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/app_name"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
             android:textSize="25pt"
             app:layout_constraintBottom_toBottomOf="@+id/constraintsLayout"
             app:layout_constraintEnd_toEndOf="@+id/constraintsLayout"
@@ -43,10 +44,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:background="#0E2F44"
+            android:background="@color/colorPrimaryDark"
             android:onClick="onSignIn"
             android:text="@string/signInMainMenu"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.505"
