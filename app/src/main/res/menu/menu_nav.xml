@@ -4,16 +4,16 @@
         android:checkableBehavior="single" >
         <item
             android:id="@+id/nav_mainpage"
-            android:icon="@android:drawable/sym_action_email"
+            android:icon="@drawable/profile"
             android:title="@string/nav_inbox"
             android:checked="true" />
         <item
             android:id="@+id/nav_matching"
-            android:icon="@android:drawable/ic_menu_edit"
+            android:icon="@drawable/id"
             android:title="@string/nav_drafts" />
         <item
             android:id="@+id/nav_trails"
-            android:icon="@android:drawable/ic_menu_send"
+            android:icon="@drawable/trail"
             android:title="@string/nav_sent" />
         <item
             android:id="@+id/nav_trash"
