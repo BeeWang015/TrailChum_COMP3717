@@ -4,29 +4,34 @@ import java.util.List;
 
 public class UserAccount {
 
+    String uid;
     String email;
     String name;
-
     String gender;
     String dateOfBirth;
     List<String> trailsToBeDone;
-    List<String> trailsDone;
 
     public UserAccount() {
 
     }
 
-    public UserAccount(String email, String name, String gender,
+    public UserAccount(String uid, String email, String name, String gender,
                        String dateOfBirth,
                        List<String> trailsToBeDone) {
+        this.uid = uid;
         this.email = email;
         this.name = name;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.trailsToBeDone = trailsToBeDone;
-        this.trailsDone = trailsDone;
     }
 
+    public String getUid() {
+        return this.uid;
+    }
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
     public String getEmail() {
         return email;
     }
@@ -67,11 +72,4 @@ public class UserAccount {
         this.trailsToBeDone = trailsToBeDone;
     }
 
-    public List<String> getTrailsDone() {
-        return trailsDone;
-    }
-
-    public void setTrailsDone(List<String> trailsDone) {
-        this.trailsDone = trailsDone;
-    }
 }

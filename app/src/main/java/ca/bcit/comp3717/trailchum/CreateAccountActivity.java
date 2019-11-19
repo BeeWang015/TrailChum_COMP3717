@@ -53,6 +53,7 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
     public static int MY_REQUEST_CODE = 502;
     List<AuthUI.IdpConfig> signInProviders;
 
+    String uid;
     String email;
     String userName;
     ArrayList<String> trailsToBeDone;
@@ -77,6 +78,8 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         databaseUserAccounts = FirebaseDatabase.getInstance().getReference("hikersAccounts");
 
         userAccountsListCreateAccount = new ArrayList<UserAccount>();
+        trailsToBeDone = new ArrayList<>();
+        trailsToBeDone.add("555534");
 
 
 //        if(databaseUserAccounts.child(userCreateAccount.getUid()).getKey()
@@ -171,7 +174,8 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         }
 
         //String toDoTask = databaseToDoList.push().getKey();
-        UserAccount user1 = new UserAccount(userEmailAddTask, nameAddTask, genderAddTask,
+        uid = userCreateAccount.getUid();
+        UserAccount user1 = new UserAccount(uid, userEmailAddTask, nameAddTask, genderAddTask,
                 dateOfBirthAddTask, trailsToBeDone);
 
         Task setValueToDoTask = databaseUserAccounts.child(userCreateAccount.getUid()).setValue(user1);
@@ -254,7 +258,7 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        String currentDueDate = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+        String currentDueDate = DateFormat.getDateInstance(DateFormat.MEDIUM).format(c.getTime());
 
         dateOfBirthPicked.setText(currentDueDate);
     }

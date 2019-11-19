@@ -1,5 +1,6 @@
 package ca.bcit.comp3717.trailchum;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,11 +17,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TrailList extends AppCompatActivity {
 
@@ -33,11 +46,24 @@ public class TrailList extends AppCompatActivity {
                     "query?where=1%3D1&outFields=ADDRQUAL,TRAILCLASS,STAIRS,MATERIAL,PATHNAME," +
                     "AREALEN,AREAWID,COMPKEY&outSR=4326&f=json";
     private ArrayList<Trail> trailList;
+    DatabaseReference databaseUserAccountsUserProfile;
+    FirebaseUser user;
+    String UID;
+    List<UserAccount> userList;
+    String trailKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trail_list);
+
+        databaseUserAccountsUserProfile = FirebaseDatabase.getInstance().getReference("hikersAccounts");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            UID = user.getUid();
+        }
+
+        userList = new ArrayList<>();
 
         trailList = new ArrayList<>();
         lvTrails = findViewById(R.id.lvTrails);
@@ -47,7 +73,7 @@ public class TrailList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Trail trail = trailList.get(position);
-
+                trailKey = trail.getCOMPKEY();
                 showTrailDetailView(trail.getPATHNAME(),
                         trail.getTRAILCLASS(),
                         trail.getMATERIAL(),
@@ -57,8 +83,29 @@ public class TrailList extends AppCompatActivity {
                         "No ratings.",
                         trail.getPATHSTART(),
                         trail.getPATHEND());
-
             }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        databaseUserAccountsUserProfile.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userList.clear();
+                for (DataSnapshot users : dataSnapshot.getChildren()) {
+                    UserAccount user1 = users.getValue(UserAccount.class);
+                    if (user1.getUid().equals(UID))
+                        userList.add(user1);
+                }
+
+//                PatientAdapter adapter = new PatientAdapter(History.this, patientList);
+//                lvPatient.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
     }
 
@@ -218,8 +265,6 @@ public class TrailList extends AppCompatActivity {
 
             // Attach the adapter to a ListView
             lvTrails.setAdapter(adapter);
-
-            Toast.makeText(TrailList.this, String.valueOf(trailList.size()), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -259,6 +304,14 @@ public class TrailList extends AppCompatActivity {
         final TextView tvRating = dialogView.findViewById(R.id.tvRatingValue);
         tvRating.setText(trailRating);
 
+        final Button btnAddToList = dialogView.findViewById(R.id.btnAddTrailToList);
+        btnAddToList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addTrail(trailKey);
+            }
+        });
+
         final Button btnViewOnMap = dialogView.findViewById(R.id.btnViewOnMap);
         btnViewOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,6 +325,55 @@ public class TrailList extends AppCompatActivity {
 
         final AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
+    }
+
+    public void addTrail(String COMPKEY) {
+        boolean alreadyInList = false;
+        UserAccount user = userList.get(0);
+        List<String> userTrailList = user.getTrailsToBeDone();
+        for (String key : user.getTrailsToBeDone()) {
+            if (COMPKEY.equals(key))
+                alreadyInList = true;
+        }
+        if (!alreadyInList) {
+            userTrailList.add(COMPKEY);
+            updateUser(user.getUid(),
+                    user.getEmail(),
+                    user.getName(),
+                    user.getGender(),
+                    user.getDateOfBirth(),
+                    userTrailList);
+        } else {
+            Toast.makeText(TrailList.this, "Trail already exists in your list.",
+                    Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    private void updateUser(String uid, String email, String name, String gender, String dob, List<String> trailList) {
+
+        DatabaseReference dbRef = databaseUserAccountsUserProfile.child(UID);
+
+        UserAccount updatedUser = new UserAccount(uid, email, name, gender, dob, trailList);
+
+        Task setValueTask = dbRef.setValue(updatedUser);
+
+        setValueTask.addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                Toast.makeText(TrailList.this,
+                        "Added to your trails list!",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        setValueTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(TrailList.this,
+                        "Something went wrong.\n" + e.toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
 
