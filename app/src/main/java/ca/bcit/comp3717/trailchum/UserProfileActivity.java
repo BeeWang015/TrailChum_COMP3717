@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,6 +22,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,8 +40,13 @@ public class UserProfileActivity extends AppCompatActivity {
     public static final int MY_REQUEST_CODE = 501;
 
     TextView tvName;
+    TextView tvDateOfBirth;
+    TextView tvGender;
 
     ImageView ivProfilePic;
+    DatabaseReference databaseUserAccountsUserProfile;
+
+    UserAccount userUserProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +58,69 @@ public class UserProfileActivity extends AppCompatActivity {
         ivProfilePic = findViewById(R.id.ivProfilePicUserProfile);
         btnSignOut = findViewById(R.id.btnSignOut);
         tvName = findViewById(R.id.tvNameUserProfile);
+        tvDateOfBirth = findViewById(R.id.tvDOBUserProfile);
+        tvGender = findViewById(R.id.tvGenderUserProfile);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        databaseUserAccountsUserProfile = FirebaseDatabase.getInstance().getReference("hikersAccounts");
+
+
         if (user != null) {
 
             user = FirebaseAuth.getInstance().getCurrentUser();
 
             tvName.setText(user.getDisplayName());
+            databaseUserAccountsUserProfile.child(user.getUid()).child("dateOfBirth").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        if (dataSnapshot.getValue() != null) {
+                            try {
+                                Log.e("TAG", "" + dataSnapshot.getValue()); // your name values you will get here
+                                tvDateOfBirth.setText(dataSnapshot.getValue().toString());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Log.e("TAG", " it's null.");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("onCancelled", " cancelled");
+                }
+            });
+
+            databaseUserAccountsUserProfile.child(user.getUid()).child("gender").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        if (dataSnapshot.getValue() != null) {
+                            try {
+                                Log.e("TAG", "" + dataSnapshot.getValue()); // your name values you will get here
+                                tvGender.setText(dataSnapshot.getValue().toString());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Log.e("TAG", " it's null.");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("onCancelled", " cancelled");
+                }
+            });
+
+
         } else {
 //            signInProviders = Arrays.asList(
 //                    new AuthUI.IdpConfig.EmailBuilder().build(),

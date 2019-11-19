@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -32,6 +33,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -75,6 +77,7 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         databaseUserAccounts = FirebaseDatabase.getInstance().getReference("hikersAccounts");
 
         userAccountsListCreateAccount = new ArrayList<UserAccount>();
+
 
 //        if(databaseUserAccounts.child(userCreateAccount.getUid()).getKey()
 //                == userCreateAccount.getUid()){
@@ -211,6 +214,27 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
 
                 userCreateAccount = FirebaseAuth.getInstance().getCurrentUser();
                 Toast.makeText(this, "" + userCreateAccount.getEmail(), Toast.LENGTH_SHORT).show();
+
+                databaseUserAccounts.orderByChild("email").equalTo(userCreateAccount.getEmail())
+                        .addValueEventListener(new ValueEventListener(){
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot){
+                        if(dataSnapshot.exists() ){
+                            Toast.makeText(CreateAccountActivity.this,
+                                    "PRESENT",Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(CreateAccountActivity.this,
+                                    UserProfileActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+
+
+                });
 
                 email = userCreateAccount.getEmail();
                 userName = userCreateAccount.getDisplayName();
