@@ -56,19 +56,6 @@
             app:layout_constraintVertical_bias="1.0" />
 
 
-        <Button
-            android:id="@+id/btnTrailList"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:background="#c4c4c4"
-            android:onClick="onOpenTrailList"
-            android:text="trails"
-            android:textColor="#000000"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

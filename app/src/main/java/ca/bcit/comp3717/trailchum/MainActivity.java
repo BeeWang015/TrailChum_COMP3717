@@ -51,11 +51,6 @@ public class MainActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void onOpenTrailList(View view) {
-        Intent intent = new Intent(this, TrailList.class);
-        startActivity(intent);
-    }
-
 //    @Override
 //    public boolean onNavigationItemSelected(MenuItem item) {
 //        int id = item.getItemId();
