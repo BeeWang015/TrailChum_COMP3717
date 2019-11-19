@@ -27,35 +27,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <TextView
-                android:id="@+id/tvNameUserProfile"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:hint="@string/firstLastNameUserProfile"
-                android:textSize="14pt" />
+                android:layout_margin="15dp"
+                android:layout_gravity="center">
 
-            <TextView
-                android:id="@+id/tvDOBUserProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dateOfBirthPickerCreateAccount"
-                android:layout_gravity="center"/>
+                <ImageView
+                    android:id="@+id/ivProfilePicUserProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_margin="10dp"/>
 
-            <TextView
-                android:id="@+id/tvGenderUserProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/genderCreateAccount"
-                android:layout_gravity="center"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dp">
+
+                    <TextView
+                        android:id="@+id/tvNameUserProfile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/firstLastNameUserProfile"
+                        android:textSize="10pt" />
+
+                    <TextView
+                        android:id="@+id/tvDOBUserProfile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dateOfBirthPickerCreateAccount" />
+
+                    <TextView
+                        android:id="@+id/tvGenderUserProfile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/genderCreateAccount" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/ivProfilePicUserProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@mipmap/ic_launcher" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,7 +88,7 @@
             <ListView
                 android:id="@+id/lvUpcomingHikesUserProfile"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="2"
                 android:background="#c6c6c6" />
         </LinearLayout>
@@ -83,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onSignOut"
-            android:text="SignOut" />
+            android:text="@string/nav_signout" />
 
     </LinearLayout>
 

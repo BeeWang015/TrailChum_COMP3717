@@ -189,16 +189,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                 intent = new Intent(this,UserProfileActivity.class);
                 break;
             case R.id.nav_trails:
-                intent = new Intent(this, CurrentLocationActivity.class);
-                break;
-            case R.id.nav_trash:
-                fragment = new TrashFragment();
-                break;
-            case R.id.nav_help:
-                intent = new Intent(this, HelpActivity.class);
-                break;
-            case R.id.nav_feedback:
-                intent = new Intent(this, FeedbackActivity.class);
+                intent = new Intent(this, TrailList.class);
                 break;
 
         }
