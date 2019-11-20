@@ -80,6 +80,8 @@ public class Matches extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user.clear();
+                allUsers.clear();
+                matchesList.clear();
                 for (DataSnapshot users : dataSnapshot.getChildren()) {
                     UserAccount user1 = users.getValue(UserAccount.class);
                     if (user1.getUid().equals(UID))
