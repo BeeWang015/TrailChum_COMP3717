@@ -51,6 +51,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class UserProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     Button btnSignOut;
@@ -75,7 +77,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
     TextView tvDOBUserProfile;
     TextView tvGenderUserProfile;
 
-    ImageView ivProfilePic;
+    CircleImageView civProfilePic;
     DatabaseReference databaseUserAccountsUserProfile;
 
 
@@ -110,7 +112,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ivProfilePic = findViewById(R.id.ivProfilePicUserProfile);
+        civProfilePic = findViewById(R.id.civProfilePicUserProfile);
         btnSignOut = findViewById(R.id.btnSignOut);
         tvNameUserProfile = findViewById(R.id.tvNameUserProfile);
         tvDOBUserProfile = findViewById(R.id.tvDOBUserProfile);
@@ -403,7 +405,8 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                     currentUser.getName(),
                     currentUser.getGender(),
                     currentUser.getDateOfBirth(),
-                    userTrailList);
+                    userTrailList,
+                    currentUser.getImageURL());
         } else {
             Toast.makeText(UserProfileActivity.this, "Cannot have an empty trails list.",
                     Toast.LENGTH_LONG).show();
@@ -411,11 +414,11 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
     }
 
-    private void updateUser(String uid, String email, String name, String gender, String dob, List<String> trailList) {
+    private void updateUser(String uid, String email, String name, String gender, String dob, List<String> trailList, String imageURLParameter) {
 
         DatabaseReference dbRef = databaseUserAccountsUserProfile.child(UID);
 
-        UserAccount updatedUser = new UserAccount(uid, email, name, gender, dob, trailList);
+        UserAccount updatedUser = new UserAccount(uid, email, name, gender, dob, trailList,imageURLParameter);
 
         Task setValueTask = dbRef.setValue(updatedUser);
 
