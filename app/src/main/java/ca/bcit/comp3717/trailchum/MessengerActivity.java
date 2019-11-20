@@ -37,7 +37,7 @@ public class MessengerActivity extends AppCompatActivity {
     FirebaseUser userMessenger;
     DatabaseReference databaseUsersMessenger;
 
-    TextView tvUserName;
+    //TextView tvUserName;
 
     EditText etMessageMessenger;
     ImageButton btnSendMessenger;
@@ -46,6 +46,7 @@ public class MessengerActivity extends AppCompatActivity {
     List<Chat> mChat;
 
     RecyclerView rView;
+
     CircleImageView civChatHead;
 
     Intent intent;
@@ -55,15 +56,15 @@ public class MessengerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messenger);
 
-        btnSendMessenger = findViewById(R.id.btnSendMessenger);
-        etMessageMessenger = findViewById(R.id.etWriteMessenger);
-        tvUserName = findViewById(R.id.theirName);
-        civChatHead = findViewById(R.id.avatar);
+        btnSendMessenger = findViewById(R.id.btn_sendMessenger);
+        etMessageMessenger = findViewById(R.id.et_sendMessenger);
+        //tvUserName = findViewById(R.id.theirNameMessages);
+        civChatHead = findViewById(R.id.profile_image);
 
         intent = getIntent();
         final String receiverUserId = intent.getStringExtra("receiverID");
 
-        rView = findViewById(R.id.messages_view);
+        rView = findViewById(R.id.recycler_view);
         rView.setHasFixedSize(true);
         LinearLayoutManager linLayoutManager = new LinearLayoutManager(getApplicationContext());
         linLayoutManager.setStackFromEnd(true);
@@ -94,7 +95,7 @@ public class MessengerActivity extends AppCompatActivity {
                 UserAccount userMessengerAccount = dataSnapshot.getValue(UserAccount.class);
                 //tvUserName.setText(userMessengerAccount.getName());
                 if(userMessengerAccount.getImageURL().equals("default")) {
-                    Toast.makeText(MessengerActivity.this, "" + userMessengerAccount.getName(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MessengerActivity.this, "" + userMessengerAccount.getName(), Toast.LENGTH_SHORT).show();
                     //civChatHead.setImageResource(R.mipmap.ic_launcher);
                 } else {
                     Glide.with(MessengerActivity.this)
@@ -133,7 +134,7 @@ public class MessengerActivity extends AppCompatActivity {
                 mChat.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
-                    Toast.makeText(MessengerActivity.this, "" + chat.getSender(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MessengerActivity.this, "" + chat.getSender(), Toast.LENGTH_SHORT).show();
                     if (chat.getReceiver().equals(myID) && chat.getSender().equals(userID) ||
                     chat.getReceiver().equals(userID) && chat.getSender().equals(myID)) {
                         mChat.add(chat);

@@ -31,20 +31,20 @@ public class MessengerAdapter extends RecyclerView.Adapter<MessengerAdapter.View
 
 
     public MessengerAdapter(Context mContext, List<Chat> mChat, String imageUrl) {
-        this.mContext = mContext;
         this.mChat = mChat;
+        this.mContext = mContext;
         this.imageUrl = imageUrl;
     }
     @NonNull
     @Override
     public MessengerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == MESSAGE_RIGHT) {
-            View v = LayoutInflater.from(mContext).inflate(R.layout.messenger_chat_placeholders, parent, false);
-            return new MessengerAdapter.ViewHolder(v);
-        } else{
-            View v = LayoutInflater.from(mContext).inflate(R.layout.user_their_messages, parent, false);
-            return new MessengerAdapter.ViewHolder(v);
 
+        if (viewType == MESSAGE_RIGHT) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.messenger_chat_placeholders, parent, false);
+            return new MessengerAdapter.ViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.user_their_messages, parent, false);
+            return new MessengerAdapter.ViewHolder(view);
         }
     }
 
@@ -74,7 +74,7 @@ public class MessengerAdapter extends RecyclerView.Adapter<MessengerAdapter.View
             super(itemView);
 
             show_message = itemView.findViewById(R.id.show_message);
-            profile_pic = itemView.findViewById(R.id.avatar);
+            profile_pic = itemView.findViewById(R.id.profile_image);
 
 
 
