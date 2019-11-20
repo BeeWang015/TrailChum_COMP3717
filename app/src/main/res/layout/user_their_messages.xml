@@ -4,6 +4,8 @@
     android:layout_width="300dp"
     android:layout_height="wrap_content">
 
+
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="40dp"
         android:id="@+id/profile_image"

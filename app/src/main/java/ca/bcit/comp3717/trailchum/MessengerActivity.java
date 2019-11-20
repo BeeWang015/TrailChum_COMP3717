@@ -38,6 +38,7 @@ public class MessengerActivity extends AppCompatActivity {
     DatabaseReference databaseUsersMessenger;
 
     //TextView tvUserName;
+    TextView tvTopBarName;
 
     EditText etMessageMessenger;
     ImageButton btnSendMessenger;
@@ -69,6 +70,11 @@ public class MessengerActivity extends AppCompatActivity {
         LinearLayoutManager linLayoutManager = new LinearLayoutManager(getApplicationContext());
         linLayoutManager.setStackFromEnd(true);
         rView.setLayoutManager(linLayoutManager);
+        tvTopBarName = findViewById(R.id.usernameTopBarChat);
+
+        String name = intent.getStringExtra("name");
+
+        tvTopBarName.setText(name);
 
         databaseUsersMessenger = FirebaseDatabase.getInstance()
                 .getReference("hikersAccounts").child(receiverUserId);

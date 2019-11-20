@@ -189,14 +189,13 @@ public class Matches extends AppCompatActivity {
         final TextView tvUserGender = dialogView.findViewById(R.id.tvGender);
         tvUserGender.setText(gender);
 
-
-
         final Button btnSendMessage = dialogView.findViewById(R.id.btnSendMessage);
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Matches.this, MessengerActivity.class);
                 intent.putExtra("receiverID", uid);
+                intent.putExtra("name", tvUserName.getText().toString());
                 startActivity(intent);
             }
         });
