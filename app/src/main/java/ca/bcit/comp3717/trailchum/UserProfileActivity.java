@@ -181,7 +181,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
         switch(id) {
             case R.id.nav_matching:
-                intent = new Intent(this,CreateAccountActivity.class);
+                intent = new Intent(this, Matches.class);
                 break;
             case R.id.nav_mainpage:
                 intent = new Intent(this,UserProfileActivity.class);

@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MessengerActivity"></activity>
+        <activity android:name=".Matches"></activity>
+        <activity android:name=".MessengerActivity" />
         <activity android:name=".CheckActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,11 +46,11 @@
         <activity android:name=".SignInActivity" />
         <activity android:name=".TrailList" />
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
     </application>
 
