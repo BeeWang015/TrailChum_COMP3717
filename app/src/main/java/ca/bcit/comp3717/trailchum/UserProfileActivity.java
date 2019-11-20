@@ -87,6 +87,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             UID = user.getUid();
+            Toast.makeText(this, UID, Toast.LENGTH_LONG).show();
         }
 
         trailsToDo = new ArrayList<>();
@@ -265,12 +266,15 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //                trailsToDo.clear();
 //                trailsInDB.clear();
+//                currUser.clear();
                 for (DataSnapshot users : dataSnapshot.getChildren()) {
                     UserAccount user1 = users.getValue(UserAccount.class);
-                    if (user1.getUid().equals(UID))
+                    if (user1.getUid().equals(UID)) {
+                        currUser.add(user1);
                         for (String compkey : user1.getTrailsToBeDone()) {
                             trailsInDB.add(compkey);
                         }
+                    }
                 }
             }
 
@@ -369,28 +373,6 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
     }
 
-    private void deleteTrail(String id) {
-        DatabaseReference dbRef =
-                databaseUserAccountsUserProfile.child(UID).child("trailsToBeDone").child(id);
-        Task setRemoveTask = dbRef.removeValue();
-        setRemoveTask.addOnSuccessListener(new OnSuccessListener() {
-            @Override
-            public void onSuccess(Object o) {
-                Toast.makeText(UserProfileActivity.this,
-                        "Trail Deleted.",Toast.LENGTH_LONG).show();
-            }
-        });
-
-        setRemoveTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UserProfileActivity.this,
-                        "Something went wrong.\n" + e.toString(),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     private void showTrailToBeDoneDialog(final String pathname, final String compkey) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(UserProfileActivity.this);
         LayoutInflater inflater = getLayoutInflater();
@@ -412,7 +394,57 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
             }
         });
 
+    }
 
+    public void deleteTrail(String COMPKEY) {
+        boolean exists = false;
+        UserAccount currentUser = currUser.get(0);
+        List<String> userTrailList = currentUser.getTrailsToBeDone();
+        for (String key : userTrailList) {
+            if (key.equals(COMPKEY)) {
+                exists = true;
+                break;
+            }
+        }
+        if (exists) {
+            userTrailList.remove(COMPKEY);
+            updateUser(currentUser.getUid(),
+                    currentUser.getEmail(),
+                    currentUser.getName(),
+                    currentUser.getGender(),
+                    currentUser.getDateOfBirth(),
+                    userTrailList);
+        } else {
+            Toast.makeText(UserProfileActivity.this, "Something went wrong.",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void updateUser(String uid, String email, String name, String gender, String dob, List<String> trailList) {
+
+        DatabaseReference dbRef = databaseUserAccountsUserProfile.child(UID);
+
+        UserAccount updatedUser = new UserAccount(uid, email, name, gender, dob, trailList);
+
+        Task setValueTask = dbRef.setValue(updatedUser);
+
+        setValueTask.addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                Toast.makeText(UserProfileActivity.this,
+                        "Trail deleted",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        setValueTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(UserProfileActivity.this,
+                        "Something went wrong.\n" + e.toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }
