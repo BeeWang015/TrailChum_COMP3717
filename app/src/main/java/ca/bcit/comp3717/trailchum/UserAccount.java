@@ -10,6 +10,7 @@ public class UserAccount {
     String gender;
     String dateOfBirth;
     List<String> trailsToBeDone;
+    String imageURL;
 
     public UserAccount() {
 
@@ -17,21 +18,32 @@ public class UserAccount {
 
     public UserAccount(String uid, String email, String name, String gender,
                        String dateOfBirth,
-                       List<String> trailsToBeDone) {
+                       List<String> trailsToBeDone, String imageURL) {
         this.uid = uid;
         this.email = email;
         this.name = name;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.trailsToBeDone = trailsToBeDone;
+        this.imageURL = imageURL;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getUid() {
         return this.uid;
     }
+
     public void setUid(String uid) {
         this.uid = uid;
     }
+
     public String getEmail() {
         return email;
     }

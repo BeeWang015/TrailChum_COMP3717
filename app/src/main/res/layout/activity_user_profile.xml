@@ -33,8 +33,8 @@
                 android:layout_gravity="center"
                 android:layout_margin="15dp">
 
-                <ImageView
-                    android:id="@+id/ivProfilePicUserProfile"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civProfilePicUserProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

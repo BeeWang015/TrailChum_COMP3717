@@ -50,7 +50,8 @@ import java.util.List;
 
 public class CreateAccountActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    public static int MY_REQUEST_CODE = 502;
+    public static final String DEFAULT_IMAGE_URL = "default";
+    public static final int MY_REQUEST_CODE = 502;
     List<AuthUI.IdpConfig> signInProviders;
 
     String uid;
@@ -93,10 +94,10 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
 //        }
 
         signInProviders = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.PhoneBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+                new AuthUI.IdpConfig.EmailBuilder().build());
+//                new AuthUI.IdpConfig.PhoneBuilder().build(),
+//                new AuthUI.IdpConfig.FacebookBuilder().build(),
+//                new AuthUI.IdpConfig.GoogleBuilder().build());
 
         showSignInOptions();
 
@@ -175,7 +176,7 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         //String toDoTask = databaseToDoList.push().getKey();
         uid = userCreateAccount.getUid();
         UserAccount user1 = new UserAccount(uid, userEmailAddTask, nameAddTask, genderAddTask,
-                dateOfBirthAddTask, trailsToBeDone);
+                dateOfBirthAddTask, trailsToBeDone, DEFAULT_IMAGE_URL);
 
         Task setValueToDoTask = databaseUserAccounts.child(userCreateAccount.getUid()).setValue(user1);
 

@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.User;
@@ -47,7 +49,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class UserProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class UserProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     Button btnSignOut;
     FirebaseUser user;
@@ -71,7 +75,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
     TextView tvDOBUserProfile;
     TextView tvGenderUserProfile;
 
-    ImageView ivProfilePic;
+    CircleImageView civProfilePic;
     DatabaseReference databaseUserAccountsUserProfile;
 
 
@@ -79,8 +83,10 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        databaseUserAccountsUserProfile = FirebaseDatabase.getInstance().getReference("hikersAccounts");
         user = FirebaseAuth.getInstance().getCurrentUser();
+        databaseUserAccountsUserProfile = FirebaseDatabase.getInstance()
+                .getReference("hikersAccounts");
+
         if (user != null) {
             UID = user.getUid();
         }
@@ -111,17 +117,31 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ivProfilePic = findViewById(R.id.ivProfilePicUserProfile);
+        civProfilePic = findViewById(R.id.civProfilePicUserProfile);
         btnSignOut = findViewById(R.id.btnSignOut);
         tvNameUserProfile = findViewById(R.id.tvNameUserProfile);
         tvDOBUserProfile = findViewById(R.id.tvDOBUserProfile);
         tvGenderUserProfile = findViewById(R.id.tvGenderUserProfile);
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
 
-            Toast.makeText(this, "" + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-            tvNameUserProfile.setText(user.getDisplayName());
+            databaseUserAccountsUserProfile.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    UserAccount userAccountMade = dataSnapshot.getValue(UserAccount.class);
+                    tvNameUserProfile.setText(userAccountMade.getName());
+                    if (userAccountMade.getImageURL().equals("default")) {
+                        civProfilePic.setImageResource(R.mipmap.ic_launcher_round);
+                    } else {
+                        Glide.with(UserProfileActivity.this)
+                                .load(userAccountMade.getImageURL()).into(civProfilePic);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
             databaseUserAccountsUserProfile.child(user.getUid()).child("dateOfBirth").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -209,12 +229,12 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         Fragment fragment = null;
         Intent intent = null;
 
-        switch(id) {
+        switch (id) {
             case R.id.nav_matching:
                 intent = new Intent(this, Matches.class);
                 break;
             case R.id.nav_mainpage:
-                intent = new Intent(this,UserProfileActivity.class);
+                intent = new Intent(this, UserProfileActivity.class);
                 break;
             case R.id.nav_trails:
                 intent = new Intent(this, TrailList.class);
@@ -263,7 +283,8 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
     }
 

@@ -342,7 +342,8 @@ public class TrailList extends AppCompatActivity {
                     user.getName(),
                     user.getGender(),
                     user.getDateOfBirth(),
-                    userTrailList);
+                    userTrailList,
+                    user.getImageURL());
         } else {
             Toast.makeText(TrailList.this, "Trail already exists in your list.",
                     Toast.LENGTH_LONG).show();
@@ -350,11 +351,11 @@ public class TrailList extends AppCompatActivity {
 
     }
 
-    private void updateUser(String uid, String email, String name, String gender, String dob, List<String> trailList) {
+    private void updateUser(String uid, String email, String name, String gender, String dob, List<String> trailList, String imageURL) {
 
         DatabaseReference dbRef = databaseUserAccountsUserProfile.child(UID);
 
-        UserAccount updatedUser = new UserAccount(uid, email, name, gender, dob, trailList);
+        UserAccount updatedUser = new UserAccount(uid, email, name, gender, dob, trailList, imageURL);
 
         Task setValueTask = dbRef.setValue(updatedUser);
 
