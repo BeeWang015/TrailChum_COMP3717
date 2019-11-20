@@ -39,10 +39,10 @@ public class MessengerAdapter extends RecyclerView.Adapter<MessengerAdapter.View
     @Override
     public MessengerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == MESSAGE_RIGHT) {
-            View v = LayoutInflater.from(mContext).inflate(R.layout.user_their_messages, parent, false);
+            View v = LayoutInflater.from(mContext).inflate(R.layout.messenger_chat_placeholders, parent, false);
             return new MessengerAdapter.ViewHolder(v);
         } else{
-            View v = LayoutInflater.from(mContext).inflate(R.layout.messenger_chat_placeholders, parent, false);
+            View v = LayoutInflater.from(mContext).inflate(R.layout.user_their_messages, parent, false);
             return new MessengerAdapter.ViewHolder(v);
 
         }
