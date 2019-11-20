@@ -126,13 +126,6 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/reviews"
-        android:layout_margin="10dp"
-        android:background="#FFC117" />
-
-    <Button
         android:id="@+id/btnAddTrailToList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

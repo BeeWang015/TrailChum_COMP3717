@@ -114,7 +114,6 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
                 android.R.layout.simple_spinner_dropdown_item, gendersCreateAccount);
 
         sGender.setAdapter(gendersAdapterCreateAccount);
-        gendersSelected = sGender.getSelectedItem().toString();
 
         btnCreateAccount = findViewById(R.id.btnCreateAccountCreateAccount);
         btnSignOut = findViewById(R.id.btnSignOut);
@@ -169,6 +168,7 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         String userEmailAddTask = email;
         String nameAddTask = userName;
         String dateOfBirthAddTask = dateOfBirthPicked.getText().toString();
+        gendersSelected = sGender.getSelectedItem().toString();
         String genderAddTask = gendersSelected;
 
         if (TextUtils.isEmpty(dateOfBirthAddTask)) {
