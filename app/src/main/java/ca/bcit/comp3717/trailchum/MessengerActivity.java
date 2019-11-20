@@ -89,6 +89,8 @@ public class MessengerActivity extends AppCompatActivity {
 
         databaseUsersMessenger = FirebaseDatabase.getInstance().getReference("hikersAccounts").child(userMessenger.getUid());
 
+        //DatabaseReference databaseReceiverName = FirebaseDatabase.getInstance().getReference("hikersAccounts").child(receiverUserId);
+
         databaseUsersMessenger.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
