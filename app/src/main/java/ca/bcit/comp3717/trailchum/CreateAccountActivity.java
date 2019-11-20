@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 
 public class CreateAccountActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -80,7 +81,11 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
 
         userAccountsListCreateAccount = new ArrayList<UserAccount>();
         trailsToBeDone = new ArrayList<>();
-        trailsToBeDone.add("555534");
+        String[] defaultTrailArray = {"555534", "555732", "553824", "553827", "555396",
+                "555592", "555524", "553990", "554183", "554212"};
+        Random random = new Random();
+        int randInt = random.nextInt(10);
+        trailsToBeDone.add(defaultTrailArray[randInt]);
 
 
 //        if(databaseUserAccounts.child(userCreateAccount.getUid()).getKey()
@@ -110,7 +115,6 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
                 android.R.layout.simple_spinner_dropdown_item, gendersCreateAccount);
 
         sGender.setAdapter(gendersAdapterCreateAccount);
-        gendersSelected = sGender.getSelectedItem().toString();
 
         btnCreateAccount = findViewById(R.id.btnCreateAccountCreateAccount);
         btnSignOut = findViewById(R.id.btnSignOut);
@@ -165,6 +169,7 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         String userEmailAddTask = email;
         String nameAddTask = userName;
         String dateOfBirthAddTask = dateOfBirthPicked.getText().toString();
+        gendersSelected = sGender.getSelectedItem().toString();
         String genderAddTask = gendersSelected;
 
         if (TextUtils.isEmpty(dateOfBirthAddTask)) {

@@ -23,13 +23,12 @@
 
     <string name="trailLength">Trail Length: </string>
     <string name="rating">Rating: </string>
-    <string name="reviews">Reviews</string>
     <string name="surface">Surface: </string>
     <string name="stairs">Stairs: </string>
     <string name="trailWidth">Trail Width: </string>
     <string name="trailClass">Trail Class: </string>
 
-    <string name="addTrailToWishlist">Add Trail to Wishlist</string>
+    <string name="addTrailToWishlist">Add Trail to Trails List</string>
     <string name="viewTrailOnMap">View Trail On Map</string>
     <string name="search">Search</string>
     <string name="zoomIn">Zoom In</string>
@@ -59,5 +58,7 @@
     <string name="input_placeholder">Write a message</string>
 
     <string name="sendMsg">Send Message</string>
+    <string name="delete">Delete</string>
+    <string name="itsAMatch">Its a match! Let them know when you are free!</string>
 
 </resources>

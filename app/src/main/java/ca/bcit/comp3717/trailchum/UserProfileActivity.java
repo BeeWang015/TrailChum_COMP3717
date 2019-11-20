@@ -3,6 +3,7 @@ package ca.bcit.comp3717.trailchum;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -14,23 +15,24 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,9 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class UserProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class UserProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     Button btnSignOut;
     FirebaseUser user;
@@ -75,7 +75,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
     TextView tvDOBUserProfile;
     TextView tvGenderUserProfile;
 
-    CircleImageView civProfilePic;
+    ImageView ivProfilePic;
     DatabaseReference databaseUserAccountsUserProfile;
 
 
@@ -83,10 +83,8 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        databaseUserAccountsUserProfile = FirebaseDatabase.getInstance().getReference("hikersAccounts");
         user = FirebaseAuth.getInstance().getCurrentUser();
-        databaseUserAccountsUserProfile = FirebaseDatabase.getInstance()
-                .getReference("hikersAccounts");
-
         if (user != null) {
             UID = user.getUid();
         }
@@ -108,40 +106,20 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                 R.string.nav_close_drawer);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-//
-//        Fragment fragment = new TrailFragment();
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.add(R.id.content_frame, fragment);
-//        ft.commit();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        civProfilePic = findViewById(R.id.civProfilePicUserProfile);
+        ivProfilePic = findViewById(R.id.ivProfilePicUserProfile);
         btnSignOut = findViewById(R.id.btnSignOut);
         tvNameUserProfile = findViewById(R.id.tvNameUserProfile);
         tvDOBUserProfile = findViewById(R.id.tvDOBUserProfile);
         tvGenderUserProfile = findViewById(R.id.tvGenderUserProfile);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
 
-            databaseUserAccountsUserProfile.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    UserAccount userAccountMade = dataSnapshot.getValue(UserAccount.class);
-                    tvNameUserProfile.setText(userAccountMade.getName());
-                    if (userAccountMade.getImageURL().equals("default")) {
-                        civProfilePic.setImageResource(R.mipmap.ic_launcher_round);
-                    } else {
-                        Glide.with(UserProfileActivity.this)
-                                .load(userAccountMade.getImageURL()).into(civProfilePic);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
+            tvNameUserProfile.setText(user.getDisplayName());
 
             databaseUserAccountsUserProfile.child(user.getUid()).child("dateOfBirth").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -202,6 +180,14 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
         }
 
+        lvTrailsToDo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Trail trail = trailsToDo.get(i);
+                showTrailToBeDoneDialog(trail.getPATHNAME(), trail.getCOMPKEY());
+            }
+        });
+
     }
 
     public void onSignOut(View v) {
@@ -229,12 +215,12 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         Fragment fragment = null;
         Intent intent = null;
 
-        switch (id) {
+        switch(id) {
             case R.id.nav_matching:
                 intent = new Intent(this, Matches.class);
                 break;
             case R.id.nav_mainpage:
-                intent = new Intent(this, UserProfileActivity.class);
+                intent = new Intent(this,UserProfileActivity.class);
                 break;
             case R.id.nav_trails:
                 intent = new Intent(this, TrailList.class);
@@ -271,20 +257,19 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         databaseUserAccountsUserProfile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                trailsToDo.clear();
-//                trailsInDB.clear();
                 for (DataSnapshot users : dataSnapshot.getChildren()) {
                     UserAccount user1 = users.getValue(UserAccount.class);
-                    if (user1.getUid().equals(UID))
+                    if (user1.getUid().equals(UID)) {
+                        currUser.add(user1);
                         for (String compkey : user1.getTrailsToBeDone()) {
                             trailsInDB.add(compkey);
                         }
+                    }
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
     }
 
@@ -327,6 +312,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                             if (attributes.get("COMPKEY").toString().equals(compKey)) {
                                 Trail trail = new Trail();
                                 trail.setPATHNAME(attributes.get("PATHNAME").toString());
+                                trail.setCOMPKEY(attributes.get("COMPKEY").toString());
                                 trailsToDo.add(trail);
                             }
                         }
@@ -376,6 +362,81 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         }
 
     }
+
+    private void showTrailToBeDoneDialog(final String pathname, final String compkey) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(UserProfileActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.trail_to_be_done_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final TextView trailName = dialogView.findViewById(R.id.tvTrailName);
+        trailName.setText(pathname);
+
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        final Button btnDelete = dialogView.findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteTrail(compkey);
+                alertDialog.dismiss();
+            }
+        });
+
+    }
+
+    public void deleteTrail(String COMPKEY) {
+        boolean exists = false;
+        UserAccount currentUser = currUser.get(0);
+        List<String> userTrailList = currentUser.getTrailsToBeDone();
+        for (String key : userTrailList) {
+            if (key.equals(COMPKEY)) {
+                exists = true;
+                break;
+            }
+        }
+        if (exists && (userTrailList.size() > 1)) {
+            userTrailList.remove(COMPKEY);
+            updateUser(currentUser.getUid(),
+                    currentUser.getEmail(),
+                    currentUser.getName(),
+                    currentUser.getGender(),
+                    currentUser.getDateOfBirth(),
+                    userTrailList);
+        } else {
+            Toast.makeText(UserProfileActivity.this, "Cannot have an empty trails list.",
+                    Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    private void updateUser(String uid, String email, String name, String gender, String dob, List<String> trailList) {
+
+        DatabaseReference dbRef = databaseUserAccountsUserProfile.child(UID);
+
+        UserAccount updatedUser = new UserAccount(uid, email, name, gender, dob, trailList);
+
+        Task setValueTask = dbRef.setValue(updatedUser);
+
+        setValueTask.addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                Toast.makeText(UserProfileActivity.this,
+                        "Trail deleted",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        setValueTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(UserProfileActivity.this,
+                        "Something went wrong.\n" + e.toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }
 
 
