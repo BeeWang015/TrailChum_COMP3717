@@ -262,9 +262,6 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         databaseUserAccountsUserProfile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                trailsToDo.clear();
-//                trailsInDB.clear();
-//                currUser.clear();
                 for (DataSnapshot users : dataSnapshot.getChildren()) {
                     UserAccount user1 = users.getValue(UserAccount.class);
                     if (user1.getUid().equals(UID)) {
@@ -404,7 +401,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                 break;
             }
         }
-        if (exists) {
+        if (exists && (userTrailList.size() > 1)) {
             userTrailList.remove(COMPKEY);
             updateUser(currentUser.getUid(),
                     currentUser.getEmail(),
@@ -413,8 +410,8 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                     currentUser.getDateOfBirth(),
                     userTrailList);
         } else {
-            Toast.makeText(UserProfileActivity.this, "Something went wrong.",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserProfileActivity.this, "Cannot have an empty trails list.",
+                    Toast.LENGTH_LONG).show();
         }
 
     }
