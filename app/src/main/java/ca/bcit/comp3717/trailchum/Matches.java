@@ -1,13 +1,20 @@
 package ca.bcit.comp3717.trailchum;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +61,15 @@ public class Matches extends AppCompatActivity {
         matchesList = new ArrayList<>();
         allUsers = new ArrayList<>();
         new GetContacts().execute();
+
+        lvUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                UserAccount user = matchesList.get(position);
+
+                showMatchDialog(user.getUid(), user.getName(), user.getDateOfBirth(), user.getGender());
+            }
+        });
 
     }
 
@@ -154,5 +170,36 @@ public class Matches extends AppCompatActivity {
             lvUsers.setAdapter(adapter);
         }
 
+    }
+
+    private void showMatchDialog(final String uid, final String name, final String dob, final String gender) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Matches.this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.match_detail_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final TextView tvUserName = dialogView.findViewById(R.id.tvName);
+        tvUserName.setText(name);
+
+        final TextView tvUserDOB = dialogView.findViewById(R.id.tvDOB);
+        tvUserDOB.setText(dob);
+
+        final TextView tvUserGender = dialogView.findViewById(R.id.tvGender);
+        tvUserGender.setText(gender);
+
+
+
+        final Button btnSendMessage = dialogView.findViewById(R.id.btnSendMessage);
+        btnSendMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Matches.this, MessengerActivity.class);
+                intent.putExtra("UID", uid);
+                startActivity(intent);
+            }
+        });
+
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 }
