@@ -106,11 +106,6 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                 R.string.nav_close_drawer);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-//
-//        Fragment fragment = new TrailFragment();
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.add(R.id.content_frame, fragment);
-//        ft.commit();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
