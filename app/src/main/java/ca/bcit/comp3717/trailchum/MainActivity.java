@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity{
     public void onSignIn(View view) {
         Intent intent = new Intent(this, CreateAccountActivity.class);
         startActivity(intent);
+        finish();
     }
 
 }

@@ -74,6 +74,7 @@ public class MessengerAdapter extends RecyclerView.Adapter<MessengerAdapter.View
             super(itemView);
 
             show_message = itemView.findViewById(R.id.show_message);
+            profile_pic = itemView.findViewById(R.id.avatar);
 
 
 

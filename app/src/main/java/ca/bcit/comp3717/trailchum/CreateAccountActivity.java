@@ -233,6 +233,7 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
                                     Intent intent = new Intent(CreateAccountActivity.this,
                                             UserProfileActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 }
                             }
 

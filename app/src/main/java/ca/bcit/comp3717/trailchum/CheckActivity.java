@@ -33,10 +33,12 @@ public class CheckActivity extends AppCompatActivity {
             // Start home activity
 
             startActivity(new Intent(CheckActivity.this, UserProfileActivity.class));
+            finish();
         } else {
             // No user is signed in
             // start login activity
             startActivity(new Intent(CheckActivity.this, MainActivity.class));
+            finish();
         }
 
         // close splash activity

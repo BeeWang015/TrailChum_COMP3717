@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.User;
@@ -121,7 +122,27 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
 
-            tvNameUserProfile.setText(user.getDisplayName());
+            databaseUserAccountsUserProfile.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    UserAccount userAccountMade = dataSnapshot.getValue(UserAccount.class);
+                    tvNameUserProfile.setText(userAccountMade.getName());
+                    if (userAccountMade.getImageURL().equals("default")) {
+                        civProfilePic.setImageResource(R.mipmap.ic_launcher);
+                    } else {
+                        Glide.with(UserProfileActivity.this)
+                                .load(userAccountMade.getImageURL()).into(civProfilePic);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+           // tvNameUserProfile.setText(user.getDisplayName());
 
             databaseUserAccountsUserProfile.child(user.getUid()).child("dateOfBirth").addValueEventListener(new ValueEventListener() {
                 @Override
