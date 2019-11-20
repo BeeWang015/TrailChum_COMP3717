@@ -55,8 +55,8 @@ public class MessengerActivity extends AppCompatActivity {
         tvUserName = findViewById(R.id.theirName);
 
         intent = getIntent();
-        final String receiverUserId = intent.getStringExtra("receiverUserID");
-        userMessenger = FirebaseAuth.getInstance().getCurrentUser();
+        final String receiverUserId = intent.getStringExtra("receiverID");
+
         rView = findViewById(R.id.messages_view);
         rView.setHasFixedSize(true);
         LinearLayoutManager linLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -65,21 +65,9 @@ public class MessengerActivity extends AppCompatActivity {
 
         databaseUsersMessenger = FirebaseDatabase.getInstance()
                 .getReference("hikersAccounts").child(receiverUserId);
+        userMessenger = FirebaseAuth.getInstance().getCurrentUser();
 
-        databaseUsersMessenger.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserAccount user = dataSnapshot.getValue(UserAccount.class);
-                tvUserName.setText(user.getName());
-
-                readMessages(userMessenger.getUid(), receiverUserId, "");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        readMessages(userMessenger.getUid(), receiverUserId, "");
 
 
         btnSendMessenger.setOnClickListener(new View.OnClickListener() {
@@ -119,10 +107,7 @@ public class MessengerActivity extends AppCompatActivity {
                 mChat.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(myID) && chat.getSender().equals(userID) ||
-                            chat.getReceiver().equals(userID) && chat.getSender().equals(myID)) {
-                        mChat.add(chat);
-                    }
+                    mChat.add(chat);
 
                     messengerAdapter = new MessengerAdapter(MessengerActivity.this, mChat, imageURL);
                     rView.setAdapter(messengerAdapter);

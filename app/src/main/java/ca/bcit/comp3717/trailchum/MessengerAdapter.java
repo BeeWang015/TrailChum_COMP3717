@@ -1,5 +1,7 @@
 package ca.bcit.comp3717.trailchum;
 
+import com.bumptech.glide.Glide;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,11 +54,11 @@ public class MessengerAdapter extends RecyclerView.Adapter<MessengerAdapter.View
 
         holder.show_message.setText(chat.getMessage());
 
-        if(imageUrl.equals("default")) {
-            holder.profile_pic.setImageResource(R.mipmap.ic_launcher);
-        } else {
-            //Gilde.width(mContext).load(imageUrl).into(holder.profile_pic);
-        }
+//        if(imageUrl.equals("default")) {
+//            holder.profile_pic.setImageResource(R.mipmap.ic_launcher);
+//        } else {
+//            Glide.with(mContext).load(imageUrl).into(holder.profile_pic);
+//        }
     }
 
     @Override
