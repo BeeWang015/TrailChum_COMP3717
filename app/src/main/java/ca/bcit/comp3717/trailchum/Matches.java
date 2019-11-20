@@ -196,7 +196,7 @@ public class Matches extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Matches.this, MessengerActivity.class);
-                intent.putExtra("UID", uid);
+                intent.putExtra("receiverID", uid);
                 startActivity(intent);
             }
         });

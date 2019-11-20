@@ -8,11 +8,10 @@
     android:focusableInTouchMode="true"
     tools:context=".MessengerActivity">
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:id="@+id/messages_view"
         android:layout_weight="2"
-        android:divider="#fff"
         android:layout_height="wrap_content"
         />
 
