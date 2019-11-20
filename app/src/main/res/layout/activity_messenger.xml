@@ -8,11 +8,10 @@
     android:focusableInTouchMode="true"
     tools:context=".MessengerActivity">
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:id="@+id/messages_view"
         android:layout_weight="2"
-        android:divider="#fff"
         android:layout_height="wrap_content"
         />
 
@@ -23,7 +22,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/etWriteMessenger"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
@@ -34,6 +33,7 @@
             android:text="" />
 
         <ImageButton
+            android:id="@+id/btnSendMessenger"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
