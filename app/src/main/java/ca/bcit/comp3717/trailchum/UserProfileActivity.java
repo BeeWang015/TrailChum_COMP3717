@@ -47,7 +47,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
     List<AuthUI.IdpConfig> signInProviders;
     public static final int MY_REQUEST_CODE = 501;
 
-    TextView tvName;
+    TextView tvNameUserProfile;
     TextView tvDOBUserProfile;
     TextView tvGenderUserProfile;
 
@@ -80,20 +80,18 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        Intent intent = getIntent();
 
         ivProfilePic = findViewById(R.id.ivProfilePicUserProfile);
         btnSignOut = findViewById(R.id.btnSignOut);
-        tvName = findViewById(R.id.tvNameUserProfile);
+        tvNameUserProfile = findViewById(R.id.tvNameUserProfile);
         tvDOBUserProfile = findViewById(R.id.tvDOBUserProfile);
         tvGenderUserProfile = findViewById(R.id.tvGenderUserProfile);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
 
-            user = FirebaseAuth.getInstance().getCurrentUser();
-
-            tvName.setText(user.getDisplayName());
+            Toast.makeText(this, "" + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+            tvNameUserProfile.setText(user.getDisplayName());
 
             databaseUserAccountsUserProfile.child(user.getUid()).child("dateOfBirth").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -150,9 +148,9 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 //                    new AuthUI.IdpConfig.PhoneBuilder().build(),
 //                    new AuthUI.IdpConfig.FacebookBuilder().build(),
 //                    new AuthUI.IdpConfig.GoogleBuilder().build());
+            Toast.makeText(this, "Nothing happening", Toast.LENGTH_SHORT).show();
 
         }
-
 
     }
 

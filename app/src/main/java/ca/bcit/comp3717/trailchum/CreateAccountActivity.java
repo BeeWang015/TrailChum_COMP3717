@@ -166,7 +166,6 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
         String dateOfBirthAddTask = dateOfBirthPicked.getText().toString();
         String genderAddTask = gendersSelected;
 
-
         if (TextUtils.isEmpty(dateOfBirthAddTask)) {
             Toast.makeText(this, "You must enter a valid date of birth.",
                     Toast.LENGTH_LONG).show();
@@ -220,25 +219,24 @@ public class CreateAccountActivity extends AppCompatActivity implements DatePick
                 Toast.makeText(this, "" + userCreateAccount.getEmail(), Toast.LENGTH_SHORT).show();
 
                 databaseUserAccounts.orderByChild("email").equalTo(userCreateAccount.getEmail())
-                        .addValueEventListener(new ValueEventListener(){
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot){
-                        if(dataSnapshot.exists() ){
-                            Toast.makeText(CreateAccountActivity.this,
-                                    "PRESENT",Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(CreateAccountActivity.this,
-                                    UserProfileActivity.class);
-                            startActivity(intent);
-                        }
-                    }
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                                    Intent intent = new Intent(CreateAccountActivity.this,
+                                            UserProfileActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
 
-                    }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
 
 
-                });
+                        });
 
                 email = userCreateAccount.getEmail();
                 userName = userCreateAccount.getDisplayName();
