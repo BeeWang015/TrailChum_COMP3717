@@ -87,7 +87,6 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             UID = user.getUid();
-            Toast.makeText(this, UID, Toast.LENGTH_LONG).show();
         }
 
         trailsToDo = new ArrayList<>();
@@ -125,7 +124,6 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
 
-            Toast.makeText(this, "" + user.getDisplayName(), Toast.LENGTH_SHORT).show();
             tvNameUserProfile.setText(user.getDisplayName());
 
             databaseUserAccountsUserProfile.child(user.getUid()).child("dateOfBirth").addValueEventListener(new ValueEventListener() {
