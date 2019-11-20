@@ -3,6 +3,7 @@ package ca.bcit.comp3717.trailchum;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -16,8 +17,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,6 +32,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -182,6 +186,14 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
         }
 
+        lvTrailsToDo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Trail trail = trailsToDo.get(i);
+                showTrailToBeDoneDialog(trail.getPATHNAME(), trail.getCOMPKEY());
+            }
+        });
+
     }
 
     public void onSignOut(View v) {
@@ -306,6 +318,7 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
                             if (attributes.get("COMPKEY").toString().equals(compKey)) {
                                 Trail trail = new Trail();
                                 trail.setPATHNAME(attributes.get("PATHNAME").toString());
+                                trail.setCOMPKEY(attributes.get("COMPKEY").toString());
                                 trailsToDo.add(trail);
                             }
                         }
@@ -355,6 +368,53 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         }
 
     }
+
+    private void deleteTrail(String id) {
+        DatabaseReference dbRef =
+                databaseUserAccountsUserProfile.child(UID).child("trailsToBeDone").child(id);
+        Task setRemoveTask = dbRef.removeValue();
+        setRemoveTask.addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                Toast.makeText(UserProfileActivity.this,
+                        "Trail Deleted.",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        setRemoveTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(UserProfileActivity.this,
+                        "Something went wrong.\n" + e.toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showTrailToBeDoneDialog(final String pathname, final String compkey) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(UserProfileActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.trail_to_be_done_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final TextView trailName = dialogView.findViewById(R.id.tvTrailName);
+        trailName.setText(pathname);
+
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        final Button btnDelete = dialogView.findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteTrail(compkey);
+                alertDialog.dismiss();
+            }
+        });
+
+
+    }
+
 }
 
 

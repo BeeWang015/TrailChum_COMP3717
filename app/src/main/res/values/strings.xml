@@ -59,5 +59,6 @@
     <string name="input_placeholder">Write a message</string>
 
     <string name="sendMsg">Send Message</string>
+    <string name="delete">Delete</string>
 
 </resources>
