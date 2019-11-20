@@ -10,7 +10,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +39,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,6 +51,18 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
 
     Button btnSignOut;
     FirebaseUser user;
+    String UID;
+    ListView lvTrailsToDo;
+    private static String SERVICE_URL =
+            "https://gis.burnaby.ca/arcgis/rest/services/OpenData/OpenData5/MapServer/14/" +
+                    "query?where=1%3D1&outFields=ADDRQUAL,TRAILCLASS,STAIRS,MATERIAL,PATHNAME," +
+                    "AREALEN,AREAWID,COMPKEY&outSR=4326&f=json";
+    private String TAG = MainActivity.class.getSimpleName();
+    private ProgressDialog pDialog;
+    ArrayList<Trail> trailsToDo;
+    ArrayList<UserAccount> currUser;
+    ArrayList<String> trailsInDB;
+
 
     List<AuthUI.IdpConfig> signInProviders;
     public static final int MY_REQUEST_CODE = 501;
@@ -51,15 +71,25 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
     TextView tvDOBUserProfile;
     TextView tvGenderUserProfile;
 
-
     ImageView ivProfilePic;
     DatabaseReference databaseUserAccountsUserProfile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         databaseUserAccountsUserProfile = FirebaseDatabase.getInstance().getReference("hikersAccounts");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            UID = user.getUid();
+        }
+
+        trailsToDo = new ArrayList<>();
+        currUser = new ArrayList<>();
+        trailsInDB = new ArrayList<>();
+        lvTrailsToDo = findViewById(R.id.lvUpcomingHikesUserProfile);
+        new UserProfileActivity.GetContacts().execute();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -213,6 +243,117 @@ public class UserProfileActivity extends AppCompatActivity implements Navigation
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        databaseUserAccountsUserProfile.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                trailsToDo.clear();
+//                trailsInDB.clear();
+                for (DataSnapshot users : dataSnapshot.getChildren()) {
+                    UserAccount user1 = users.getValue(UserAccount.class);
+                    if (user1.getUid().equals(UID))
+                        for (String compkey : user1.getTrailsToBeDone()) {
+                            trailsInDB.add(compkey);
+                        }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+    }
+
+    /**
+     * Async task class to get json by making HTTP call
+     */
+    private class GetContacts extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Showing progress dialog
+            pDialog = new ProgressDialog(UserProfileActivity.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            String jsonStr = null;
+
+            // Making a request to url and getting response
+            jsonStr = sh.makeServiceCall(SERVICE_URL);
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+
+            if (jsonStr != null) {
+                try {
+                    JSONObject apiMain = new JSONObject(jsonStr);
+                    JSONArray trailsList = apiMain.getJSONArray("features");
+
+                    for (int i = 0; i < trailsList.length(); i++) {
+                        JSONObject listItem = trailsList.getJSONObject(i);
+                        JSONObject attributes = listItem.getJSONObject("attributes");
+
+                        for (String compKey : trailsInDB) {
+                            if (attributes.get("COMPKEY").toString().equals(compKey)) {
+                                Trail trail = new Trail();
+                                trail.setPATHNAME(attributes.get("PATHNAME").toString());
+                                trailsToDo.add(trail);
+                            }
+                        }
+
+                    }
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+                }
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            // Dismiss the progress dialog
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+            TrailsToDoAdapter adapter = new TrailsToDoAdapter(UserProfileActivity.this, trailsToDo);
+
+            // Attach the adapter to a ListView
+            lvTrailsToDo.setAdapter(adapter);
+        }
+
     }
 }
 
