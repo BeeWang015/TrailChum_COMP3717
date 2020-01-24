@@ -1,2 +1,4 @@
 # TrailChum
 COMP 3717 - Group Project
+
+This is a group project done by Daniel Chu, David Li, and I. It is an app inspired by Tinder without the dating portion. The application includes authentication through firebase. The application was created to fulfill requirements for our COMP 3717 of making an app that worked with the city's open database. We used the Burnaby trails and hikes API that interacts with Google maps. It shows the user potential trails and allows them to view it on the map or add it onto their own trail list. If a user and another user has the same trail on their lists, then it will allow them to message one another. It includes a chat system that actually functions like a chat function. The application was done in a two months span and wasn't actually developed until two weeks prior to the deadline.
